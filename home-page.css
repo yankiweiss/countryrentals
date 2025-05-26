@@ -1,0 +1,38 @@
+*{
+    margin: 0px;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    background-color: rgb(147, 201, 248);
+    border-radius: 15px;
+    width: 98%;
+    margin: auto;
+    padding-bottom: 15px
+    
+}
+
+header H1{
+    text-align: center;
+    padding-top: 45PX;
+}
+
+main{
+    height: 250px;
+    background-color: lightblue;
+    border-radius: 15px;
+
+}
+
+main h1{
+    text-align: center;
+}
+
+footer{
+    height: 250px;
+    background-color: orange;
+}
