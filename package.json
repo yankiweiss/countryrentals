@@ -1,0 +1,30 @@
+{
+  "name": "countryrentals",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yankiweiss/countryrentals.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yankiweiss/countryrentals/issues"
+  },
+  "homepage": "https://github.com/yankiweiss/countryrentals#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.1",
+    "nodemailer": "^7.0.3",
+    "nodemon": "^3.1.10",
+    "path": "^0.12.7"
+  }
+}

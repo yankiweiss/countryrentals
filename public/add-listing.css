@@ -1,0 +1,45 @@
+#logo{
+    background-color: rgb(243, 243, 243);
+    padding: 50px;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 35px;
+}
+
+form{
+    width: 75%;
+    margin: auto;
+}
+
+ #emailInput, #nameInput, #phoneInput, #address, #description{
+    border-radius: 12px;
+    
+}
+
+footer {
+  height: 250px;
+  background-color: rgb(243, 243, 243);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 98%;
+  margin: auto;
+  border-radius: 15px;
+}
+
+
+@media screen and (min-width: 850px){
+
+   
+    form{
+        width: 25%;
+        margin: auto;
+    }
+    
+}
+
+
+
+
+

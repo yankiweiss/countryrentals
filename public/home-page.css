@@ -1,0 +1,136 @@
+* {
+  margin: 0px;
+}
+
+header {
+  background-color: rgb(243, 243, 243);
+  width: 98%;
+  padding: 50px;
+  margin: 5px auto;
+  border-radius: 15px;
+}
+.search-bar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 999px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    max-width: 800px;
+    margin: 15px auto;
+  }
+
+  .search-bar input,
+  .search-bar select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .search-bar button {
+    background-color: rgba(51, 51, 253, 0.753);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  #logo {
+    float: left;
+    padding: 25px;
+  }
+  
+
+  #areas {
+    width: 50%;
+  }
+
+
+
+#areas {
+  border-radius: 10px;
+  height: 35px;
+  font-size: 13px;
+  width: 85%;
+  outline: none;
+  border: none;
+}
+
+main {
+  height: 250px;
+  background-color: rgb(237, 250, 255);
+  border-radius: 15px;
+  margin: 75px 0px 75px 0px;
+}
+
+main h1 {
+  text-align: center;
+  padding: 35px 0px 25px 0px;
+}
+
+
+
+footer {
+  height: 250px;
+  background-color: rgb(243, 243, 243);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 98%;
+  margin: auto;
+  border-radius: 15px;
+}
+
+#container {
+  width: 95%;
+  margin: auto;
+}
+
+@media screen and (min-width: 850px) {
+  .search-bar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 999px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    max-width: 865px;
+    margin: 15px auto;
+  }
+
+  .search-bar input,
+  .search-bar select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    outline: none;
+    font-size: 14px;
+  }
+
+  .search-bar button {
+    background-color: rgba(51, 51, 253, 0.753);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  #logo {
+    float: left;
+    padding: 25px;
+  }
+  #header-flex {
+    padding-top: 50px;
+  }
+
+  #areas {
+    width: 50%;
+  }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+        
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./home-page.css" />
+  </head>
+  <body>
+    <header>
+      <div id="logo">
+        <h1>UPSTATE KOSHER RENTALS</h1>
+      </div>
+
+      <form class="search-bar">
+         <select name="guests" required>
+          <option value="">Which area are you looking to rent</option>
+          <option value="1">Monticello</option>
+          <option value="2">Liberty</option>
+          <option value="3">South Flasburgh</option>
+        </select>
+          
+
+        <input type="date" name="checkin" required />
+        <input type="date" name="checkout" required />
+
+        <select name="adults" required>
+          <option value="">Adults</option>
+          <option value="1">1 guest</option>
+          <option value="2">2 guests</option>
+          <option value="3">3 guests</option>
+          <option value="4">4 guests</option>
+          <option value="5">5 guests</option>
+          <option value="6">6+ guests</option>
+        </select>
+
+
+         <select name="kids" required>
+          <option value="">Kids</option>
+          <option value="1">1 guest</option>
+          <option value="2">2 guests</option>
+          <option value="3">3 guests</option>
+          <option value="4">4 guests</option>
+          <option value="5">5 guests</option>
+          <option value="6">6+ guests</option>
+        </select>
+
+
+        <button type="submit">Search</button>
+      </form>
+
+      <!--<h1>UPSTATE RENTALS</h1>
+      <br>
+      <br>
+      <i class="fa-solid fa-house fa-2xl"></i>-->
+    </header>
+
+    <div id="container">
+      <main>
+        <h1>Featured Deals!</h1>
+
+        <img src="" />
+      </main>
+
+      <h1>To Post a new Listing Please see link below.</h1>
+
+      <a href="./add-listing.html">Listing Page</a>
+    </div>
+    <footer>
+      <h1>Contact Information</h1>
+      <p>Phone:<a href="tel:9178317025">917-831-7025</a></p>
+      <p>
+        Email:<a href="mailto:Yakovw2706@gmail.com"
+          >support@upsaterentals.com</a
+        >
+      </p>
+    </footer>
+
+    <script src="home-page.js"></script>
+  </body>
+</html>
