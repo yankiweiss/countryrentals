@@ -109,6 +109,7 @@ footer {
 
 
 
+
 @media screen and (min-width: 850px) {
   .search-bar {
     display: flex;
@@ -118,7 +119,7 @@ footer {
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     align-items: center;
-    max-width: 865px;
+    max-width: 905px;
     margin: 15px auto;
   }
 
