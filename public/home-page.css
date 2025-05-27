@@ -91,6 +91,24 @@ footer {
   margin: auto;
 }
 
+#post-listing{   
+    padding: 50px;
+    border-radius: 20px;
+    margin-bottom: 50px;
+}
+
+#post-listing h1{
+    text-align: center;
+}
+
+#post-listing a{
+    display: block;
+    margin: auto;
+    width: 10%;
+}
+
+
+
 @media screen and (min-width: 850px) {
   .search-bar {
     display: flex;

@@ -9,10 +9,13 @@ const PORT = process.env.PORT || 3000;
 
 const emailRouter = require("./routes/email");
 
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/email", emailRouter);
 app.use('/', require('./routes/root.js'))
+app.use('/listing', require('./routes/api/listing.js'))
 
 connectDB();
 
