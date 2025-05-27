@@ -4,6 +4,7 @@ const app = express();
 const path = require("path");
 const mongoose = require('mongoose')
 const connectDB = require('./config/dbConn.js')
+const fileUpload = require('express-fileupload')
 
 
 
