@@ -13,7 +13,7 @@ listingForm.addEventListener("submit", async (e) => {
 
   for (const file of files) {
     try {
-      const resizedBlob = await resizeImage(file, 300, 300);
+      const resizedBlob = await resizeImage(file, 200, 200);
       formData.append("files", resizedBlob, file.name);
       console.log(`Resized and appended "${file.name}" - size: ${resizedBlob.size} bytes`);
     } catch (err) {
