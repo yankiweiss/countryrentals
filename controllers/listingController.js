@@ -17,15 +17,22 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
-    console.log('req.files:', JSON.stringify(req.files, null, 2));
+    console.log("req.files:", JSON.stringify(req.files, null, 2));
     const files = req.files?.files;
     const uploadedFiles = [];
+
+    const uploadDir = path.join(__dirname, "..", "files");
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      console.log("Created upload directory:", uploadDir);
+    }
 
     if (files) {
       const filesArray = Array.isArray(files) ? files : [files];
 
       for (const file of filesArray) {
-        const filePath = path.join(__dirname, "..", "files", file.name);
+        const filePath = path.join(uploadDir, file.name);
         await file.mv(filePath);
         uploadedFiles.push(file.name);
       }
