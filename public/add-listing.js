@@ -1,7 +1,5 @@
-
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
- // replace with your preset
- const UPLOAD_PRESET = 'unsigned_preset';
+const UPLOAD_PRESET = 'unsigned_preset'; // must be valid and unsigned in your Cloudinary dashboard
 
 const listingForm = document.getElementById("listing-form");
 
@@ -9,52 +7,58 @@ listingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const formData = new FormData(listingForm);
-  const files = document.getElementById("formFileMultiple").files;
+  const files = document.getElementById("files").files;
 
   const imageUrls = [];
 
- for (const file of files) {
-  try {
-    const uploadData = new FormData();
-    uploadData.append("file", file);
-    uploadData.append("upload_preset", UPLOAD_PRESET);
+  for (const file of files) {
+    console.log(`Uploading ${file.name}, size: ${(file.size / 1024).toFixed(2)} KB`);
 
-    const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-      method: "POST",
-      body: uploadData
-    });
+    try {
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      uploadData.append("upload_preset", UPLOAD_PRESET);
+
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: uploadData,
+      });
 
       const data = await res.json();
 
-       if (!res.ok || !data.secure_url) {
-      console.error("Upload failed for", file.name, "Cloudinary response:", data);
-      alert(`Failed to upload ${file.name}`);
-      continue; // Skip this file, don't stop everything
-    }
-
-    console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
-    imageUrls.push(data.secure_url);
+      if (!res.ok || !data.secure_url) {
+        console.error(`Upload failed for ${file.name}`, data);
+        alert(`Failed to upload ${file.name}`);
+        continue; // skip this file
+      }
 
       console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
       imageUrls.push(data.secure_url);
+
     } catch (err) {
-      console.error("Cloudinary upload failed for", file.name, err);
-      alert("Failed to upload image. Please try again.");
+      console.error(`Cloudinary upload failed for ${file.name}`, err);
+      alert(`Upload failed for ${file.name}`);
       return;
     }
   }
 
- 
+  console.log("All uploaded URLs:", imageUrls);
+
+  if (imageUrls.length === 0) {
+    alert("No images were successfully uploaded. Cannot submit listing.");
+    return;
+  }
+
   const backendData = {
     name: formData.get("name"),
     address: formData.get("address"),
-     baths: formData.get("baths"),
-  bedrooms: formData.get("bedrooms"),
-  email: formData.get("email"),
-  phone: formData.get("phone"),
-  tag: formData.get("tag"),
-  description: formData.get("description"),
-    uploadedFiles: imageUrls
+    baths: formData.get("baths"),
+    bedrooms: formData.get("bedrooms"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    tag: formData.get("tag"),
+    description: formData.get("description"),
+    uploadedFiles: imageUrls,
   };
 
   console.log("Sending to backend:", backendData);
