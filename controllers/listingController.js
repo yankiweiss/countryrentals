@@ -17,6 +17,7 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
+    console.log('req.files:', JSON.stringify(req.files, null, 2));
     const files = req.files; // may be an object or array
     const uploadedFiles = [];
 
