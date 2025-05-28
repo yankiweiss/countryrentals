@@ -28,7 +28,7 @@ const handleForm = async () => {
     });
 };
 
-listingForm.addEventListener("submit", (e) => {
+listingForm.addEventListener('submit', (e) => {
   e.preventDefault();
   handleForm();
 });
