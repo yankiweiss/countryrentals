@@ -47,6 +47,8 @@ listingForm.addEventListener("submit", async (e) => {
     uploadedFiles: imageUrls
   };
 
+  console.log("Sending to backend:", backendData);
+
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",
     headers: {
