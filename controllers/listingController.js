@@ -25,14 +25,18 @@ const createNewListing = async (req, res) => {
       const filesArray = Array.isArray(files) ? files : [files];
 
       for (const file of filesArray) {
-        const result = await cloudinary.uploader.upload(file.tempFilePath || file.tempFilePath || file.data, {
-          folder: 'listings'
+        // Upload directly to Cloudinary with resizing
+        const result = await cloudinary.uploader.upload(file.tempFilePath || file.tempFilePath || file.path, {
+          width: 300,
+          height: 300,
+          crop: "fill",
         });
+
         uploadedFiles.push(result.secure_url);
       }
     }
-    
 
+    // Save listing with Cloudinary image URLs
     const newListing = await Listing.create({
       address: req.body.address,
       baths: req.body.baths,
@@ -42,15 +46,17 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      uploadedFiles: uploadedFiles, // Cloudinary URLs
+      uploadedFiles, // resized URLs
     });
 
     res.status(201).json(newListing);
+
   } catch (error) {
     console.error("Error creating listing:", error);
     res.status(500).json({ message: "Error creating listing", error: error.message });
   }
 };
+
 
 
 module.exports = {
