@@ -13,17 +13,24 @@ const cloudinary = require('cloudinary')
 
 app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }))
 
+app.use(fileUpload({
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB per file limit
+}));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 
 app.use(cors({
   origin: '*', // or '*' for all, or use an array for multiple origins
 }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(express.json());
+
 
 app.use('/listing', require('./routes/api/listing.js'))
 
-app.use(express.urlencoded({ extended: true }));
+
 
 
 
