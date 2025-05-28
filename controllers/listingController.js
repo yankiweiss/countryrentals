@@ -25,7 +25,7 @@ const createNewListing = async (req, res) => {
       const filesArray = Array.isArray(files) ? files : [files];
 
       for (const file of filesArray) {
-        const filePath = path.join(__dirname, "files", file.name);
+        const filePath = path.join(__dirname, "..", "files", file.name);
         await file.mv(filePath);
         uploadedFiles.push(file.name);
       }
