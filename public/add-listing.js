@@ -13,18 +13,28 @@ listingForm.addEventListener("submit", async (e) => {
 
   const imageUrls = [];
 
-  for (const file of files) {
-    try {
-      const uploadData = new FormData();
-      uploadData.append("file", file);
-      uploadData.append("upload_preset", UPLOAD_PRESET);
+ for (const file of files) {
+  try {
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append("upload_preset", UPLOAD_PRESET);
 
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: "POST",
-        body: uploadData
-      });
+    const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: "POST",
+      body: uploadData
+    });
 
       const data = await res.json();
+
+       if (!res.ok || !data.secure_url) {
+      console.error("Upload failed for", file.name, "Cloudinary response:", data);
+      alert(`Failed to upload ${file.name}`);
+      continue; // Skip this file, don't stop everything
+    }
+
+    console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
+    imageUrls.push(data.secure_url);
+
       console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
       imageUrls.push(data.secure_url);
     } catch (err) {
