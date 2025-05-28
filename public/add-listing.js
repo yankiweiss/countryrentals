@@ -1,21 +1,20 @@
 const listingForm = document.getElementById("listing-form");
 
-const handleForm = async (e) => {
-  e.preventDefault()
+listingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
   const formData = new FormData(e.target);
+  const fileInput = document.getElementById("formFileMultiple");
+  const files = fileInput.files;
 
-  const myFiles = document.getElementById("formFileMultiple").files;
-
-  console.log('moshe')
-
-  Array.from(myFiles).forEach((file) => {
-  formData.append("files", file);
-});
+  for (const file of files) {
+    const resizedBlob = await resizeImage(file, 300, 300);
+    formData.append("files", resizedBlob, file.name);
+  }
 
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",
-    body: formData, // Do NOT set Content-Type here! Let browser set it (with boundary)
+    body: formData,
   })
     .then((response) => {
       if (!response.ok) throw new Error("Failed to submit listing");
@@ -29,8 +28,30 @@ const handleForm = async (e) => {
       console.error("Error submitting listing:", error);
       alert("Error submitting listing");
     });
-};
-
-listingForm.addEventListener('submit', (e) => {
-  handleForm(e);
 });
+
+function resizeImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = maxWidth;
+        canvas.height = maxHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, maxWidth, maxHeight);
+
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, file.type);
+      };
+
+      img.onerror = (err) => reject(err);
+    };
+  });
+}
