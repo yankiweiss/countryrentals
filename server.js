@@ -8,9 +8,22 @@ const fileUpload = require('express-fileupload')
 const cors = require('cors');
 
 
+
+app.use(fileUpload({
+  createParentPath: true,
+}));
+
+
 app.use(cors({
   origin: '*', // or '*' for all, or use an array for multiple origins
 }));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.json());
+
+app.use('/listing', require('./routes/api/listing.js'))
+
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -19,14 +32,14 @@ const PORT = process.env.PORT || 3000;
 
 const emailRouter = require("./routes/email");
 
-app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "public")));
+
+
 
 
 app.use("/email", emailRouter);
 app.use('/', require('./routes/root.js'))
-app.use('/listing', require('./routes/api/listing.js'))
+
 
 connectDB();
 

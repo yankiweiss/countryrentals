@@ -34,7 +34,8 @@ const listingSchema = new Schema({
     tag : {
         type: String,
         required: false
-    }
+    },
+     files: [String],
 
 
 })

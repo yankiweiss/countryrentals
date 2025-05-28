@@ -1,5 +1,6 @@
 const path = require('path');
 const Listing = require('../model/Listing');
+const fs = require('fs')
 
 // GET all listings
 const getAllListing = async (req, res) => {
@@ -14,24 +15,27 @@ const getAllListing = async (req, res) => {
   }
 };
 
-// POST create new listing with optional files
 const createNewListing = async (req, res) => {
   try {
-    const files = req.files?.files; // `files` is the field name sent from frontend
+     console.log("Inside createNewListing");
+    console.log('req.body:', req.body);
+    console.log('req.files:', req.files);
+    
+    const files = req.files?.files; // may be an object or array
     const uploadedFiles = [];
 
-    // Handle file uploads
     if (files) {
       const filesArray = Array.isArray(files) ? files : [files];
 
       for (const file of filesArray) {
         const savePath = path.join(__dirname, '../uploads', file.name);
         await file.mv(savePath);
-        uploadedFiles.push(file.name); // store file names, or full paths if you prefer
+        uploadedFiles.push(file.name);
       }
     }
 
-    // Save listing to DB
+    
+
     const newListing = await Listing.create({
       address: req.body.address,
       baths: req.body.baths,
@@ -41,15 +45,18 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      files: uploadedFiles // optional, only if your schema supports it
+      uploadedFiles: uploadedFiles,  // save uploaded filenames array here
     });
 
     res.status(201).json(newListing);
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error creating listing', error });
+    console.error('Error creating listing:', error);
+    res.status(500).json({ message: 'Error creating listing', error: error.message });
   }
 };
+
+    
 
 module.exports = {
   getAllListing,
