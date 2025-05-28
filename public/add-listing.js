@@ -11,10 +11,11 @@ listingForm.addEventListener("submit", async (e) => {
     try {
       const resizedBlob = await resizeImage(file, 300, 300);
       formData.append("files", resizedBlob, file.name);
+      console.log(`Resized and appended "${file.name}" - size: ${resizedBlob.size} bytes`);
     } catch (err) {
-      console.error("Error resizing image:", err);
-      // Optionally append original file if resizing fails
+      console.error(`Error resizing image "${file.name}":`, err);
       formData.append("files", file, file.name);
+      console.log(`Appended original file "${file.name}" - size: ${file.size} bytes`);
     }
   }
 
@@ -65,7 +66,7 @@ function resizeImage(file, maxWidth, maxHeight) {
             }
           },
           "image/jpeg",
-          0.7 // Quality from 0 to 1, adjust for compression
+          0.7
         );
       };
 
