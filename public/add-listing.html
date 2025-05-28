@@ -19,7 +19,7 @@
     </div>
 
     <div id="container">
-      <form id="listing-form">
+      <form id="listing-form" enctype="multipart/form-data">
         <!-- Name input -->
         <div class="form-floating mb-2 row">
           <input
@@ -94,7 +94,9 @@
           <input
             class="form-control"
             type="file"
+            name="files"
             id="formFileMultiple"
+            accept="image/*"
             multiple
           />
         </div>
