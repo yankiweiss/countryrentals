@@ -8,8 +8,14 @@ listingForm.addEventListener("submit", async (e) => {
   const files = fileInput.files;
 
   for (const file of files) {
-    const resizedBlob = await resizeImage(file, 300, 300);
-    formData.append("files", resizedBlob, file.name);
+    try {
+      const resizedBlob = await resizeImage(file, 300, 300);
+      formData.append("files", resizedBlob, file.name);
+    } catch (err) {
+      console.error("Error resizing image:", err);
+      // Optionally append original file if resizing fails
+      formData.append("files", file, file.name);
+    }
   }
 
   fetch("https://countryrentals.vercel.app/listing", {
@@ -40,18 +46,32 @@ function resizeImage(file, maxWidth, maxHeight) {
       img.src = event.target.result;
 
       img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = maxWidth;
-        canvas.height = maxHeight;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, maxWidth, maxHeight);
+        let ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+        let width = img.width * ratio;
+        let height = img.height * ratio;
 
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, file.type);
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("Canvas is empty"));
+            }
+          },
+          "image/jpeg",
+          0.7 // Quality from 0 to 1, adjust for compression
+        );
       };
 
       img.onerror = (err) => reject(err);
     };
+
+    reader.onerror = (err) => reject(err);
   });
 }
