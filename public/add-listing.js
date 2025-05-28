@@ -1,5 +1,5 @@
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
-const UPLOAD_PRESET = 'unsigned_preset'; // must be valid and unsigned in your Cloudinary dashboard
+const UPLOAD_PRESET = "upsatecountryrental";// must be valid and unsigned in your Cloudinary dashboard
 
 const listingForm = document.getElementById("listing-form");
 
@@ -19,6 +19,8 @@ listingForm.addEventListener("submit", async (e) => {
       uploadData.append("file", file);
       uploadData.append("upload_preset", UPLOAD_PRESET);
 
+      console.log(uploadData)
+
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: "POST",
         body: uploadData,
@@ -28,7 +30,7 @@ listingForm.addEventListener("submit", async (e) => {
 
       if (!res.ok || !data.secure_url) {
         console.error(`Upload failed for ${file.name}`, data);
-        alert(`Failed to upload ${file.name}`);
+        alert(`Failed to upload ${file.name}: ${JSON.stringify(data)}`);
         continue; // skip this file
       }
 
