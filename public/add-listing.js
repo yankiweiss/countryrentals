@@ -1,6 +1,7 @@
 const listingForm = document.getElementById("listing-form");
 
-const handleForm = async () => {
+const handleForm = async (e) => {
+  e.preventDefault()
 
   const formData = new FormData(e.target);
 
@@ -29,6 +30,5 @@ const handleForm = async () => {
 };
 
 listingForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  handleForm();
+  handleForm(e);
 });
