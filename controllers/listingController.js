@@ -18,23 +18,6 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
-    const files = req.files?.files;
-    const uploadedFiles = [];
-
-    if (files) {
-      const filesArray = Array.isArray(files) ? files : [files];
-
-      for (const file of filesArray) {
-        // Upload directly to Cloudinary with resizing
-        const result = await cloudinary.uploader.upload(file.tempFilePath || file.tempFilePath || file.path, {
-          width: 300,
-          height: 300,
-          crop: "fill",
-        });
-
-        uploadedFiles.push(result.secure_url);
-      }
-    }
 
     // Save listing with Cloudinary image URLs
     const newListing = await Listing.create({
@@ -46,7 +29,7 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      uploadedFiles, // resized URLs
+      uploadedFiles: req.body.uploadedFiles// resized URLs
     });
 
     res.status(201).json(newListing);

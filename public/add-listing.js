@@ -1,82 +1,60 @@
-console.log('Script loaded');
+
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
+const UPLOAD_PRESET = 'unsigned_preset'; // replace with your preset
 
 const listingForm = document.getElementById("listing-form");
 
 listingForm.addEventListener("submit", async (e) => {
-  
   e.preventDefault();
-  console.log('Submit event triggered');
 
-  const formData = new FormData(e.target);
-  const fileInput = document.getElementById("formFileMultiple");
-  const files = fileInput.files;
+  const formData = new FormData(listingForm);
+  const files = document.getElementById("formFileMultiple").files;
+
+  const imageUrls = [];
 
   for (const file of files) {
     try {
-      const resizedBlob = await resizeImage(file, 200, 200);
-      formData.append("files", resizedBlob, file.name);
-      console.log(`Resized and appended "${file.name}" - size: ${resizedBlob.size} bytes`);
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      uploadData.append("upload_preset", UPLOAD_PRESET);
+
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: uploadData
+      });
+
+      const data = await res.json();
+      console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
+      imageUrls.push(data.secure_url);
     } catch (err) {
-      console.error(`Error resizing image "${file.name}":`, err);
-      formData.append("files", file, file.name);
-      console.log(`Appended original file "${file.name}" - size: ${file.size} bytes`);
+      console.error("Cloudinary upload failed for", file.name, err);
+      alert("Failed to upload image. Please try again.");
+      return;
     }
   }
 
+  // Now send listing details and image URLs to your backend
+  const backendData = {
+    name: formData.get("name"),
+    address: formData.get("address"),
+    // Add other fields as needed...
+    uploadedFiles: imageUrls
+  };
+
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(backendData)
   })
-    .then((response) => {
-      if (!response.ok) throw new Error("Failed to submit listing");
-      return response.json();
+    .then(res => res.json())
+    .then(data => {
+      console.log("Listing created:", data);
+      alert("Listing submitted successfully!");
     })
-    .then((result) => {
-      console.log("Listing submitted:", result);
-      alert("Listing successfully submitted!");
-    })
-    .catch((error) => {
-      console.error("Error submitting listing:", error);
+    .catch(err => {
+      console.error("Failed to create listing:", err);
       alert("Error submitting listing");
     });
 });
-
-function resizeImage(file, maxWidth, maxHeight) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-
-      img.onload = () => {
-        let ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-        let width = img.width * ratio;
-        let height = img.height * ratio;
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error("Canvas is empty"));
-            }
-          },
-          "image/jpeg",
-          0.7
-        );
-      };
-
-      img.onerror = (err) => reject(err);
-    };
-
-    reader.onerror = (err) => reject(err);
-  });
-}
