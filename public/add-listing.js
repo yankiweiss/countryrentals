@@ -1,6 +1,6 @@
-
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
-const UPLOAD_PRESET = 'unsigned_preset'; // replace with your preset
+const CLOUDINARY_UPLOAD_URL =
+  "https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload";
+// replace with your preset
 
 const listingForm = document.getElementById("listing-form");
 
@@ -20,7 +20,7 @@ listingForm.addEventListener("submit", async (e) => {
 
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: "POST",
-        body: uploadData
+        body: uploadData,
       });
 
       const data = await res.json();
@@ -33,27 +33,31 @@ listingForm.addEventListener("submit", async (e) => {
     }
   }
 
-  // Now send listing details and image URLs to your backend
   const backendData = {
     name: formData.get("name"),
     address: formData.get("address"),
-    // Add other fields as needed...
-    uploadedFiles: imageUrls
+    baths: formData.get("baths"),
+    bedrooms: formData.get("bedrooms"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    tag: formData.get("tag"),
+    description: formData.get("description"),
+    uploadedFiles: imageUrls,
   };
 
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(backendData)
+    body: JSON.stringify(backendData),
   })
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       console.log("Listing created:", data);
       alert("Listing submitted successfully!");
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("Failed to create listing:", err);
       alert("Error submitting listing");
     });
