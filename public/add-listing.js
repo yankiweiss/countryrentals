@@ -6,9 +6,9 @@ const handleForm = async () => {
 
   const myFiles = document.getElementById("formFileMultiple").files;
 
-  Object.keys(myFiles).forEach((key) => {
-    formData.append(myFiles.item(key).name, myFiles.item(key));
-  });
+  Array.from(myFiles).forEach((file) => {
+  formData.append("files", file);
+});
 
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",

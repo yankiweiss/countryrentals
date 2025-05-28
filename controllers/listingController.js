@@ -18,13 +18,11 @@ const getAllListing = async (req, res) => {
 const createNewListing = async (req, res) => {
   try {
     console.log('req.files:', JSON.stringify(req.files, null, 2));
-    const files = req.files; // may be an object or array
-    const uploadedFiles = [];
-
-    Object.keys(files).forEach((key) => {
-      const filePath = path.join(__dirname, "files", files[key].name);
-      files[key].mv(filePath);
-    });
+    const files = req.files; // might be an object with multiple keys (each a file)
+Object.keys(files).forEach((key) => {
+  const filePath = path.join(__dirname, "files", files[key].name);
+  files[key].mv(filePath);
+});
 
     const newListing = await Listing.create({
       address: req.body.address,
