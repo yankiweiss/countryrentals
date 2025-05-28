@@ -27,11 +27,12 @@ const createNewListing = async (req, res) => {
     if (files) {
       const filesArray = Array.isArray(files) ? files : [files];
 
-      for (const file of filesArray) {
-        const savePath = path.join(__dirname, '../uploads', file.name);
-        await file.mv(savePath);
-        uploadedFiles.push(file.name);
-      }
+    const uploadDir = path.join(__dirname, '..', 'uploads'); // go up one level from controllers to project root, then uploads
+
+// Create folder if it doesn't exist
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
     }
 
     
