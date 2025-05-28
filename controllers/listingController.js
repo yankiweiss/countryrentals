@@ -21,7 +21,7 @@ const createNewListing = async (req, res) => {
     const files = req.files?.files;
     const uploadedFiles = [];
 
-    const uploadDir = path.join(__dirname, "..", "files");
+    const uploadDir = path.join(__dirname, "files");
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
