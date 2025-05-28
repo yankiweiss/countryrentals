@@ -1,6 +1,7 @@
 const path = require("path");
 const Listing = require("../model/Listing");
 const fs = require("fs");
+const cloudinary = require("../utils/cloudinary");
 
 // GET all listings
 const getAllListing = async (req, res) => {
@@ -17,26 +18,20 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
-    console.log("req.files:", JSON.stringify(req.files, null, 2));
     const files = req.files?.files;
     const uploadedFiles = [];
-
-    const uploadDir = path.join(__dirname, "files");
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-      console.log("Created upload directory:", uploadDir);
-    }
 
     if (files) {
       const filesArray = Array.isArray(files) ? files : [files];
 
       for (const file of filesArray) {
-        const filePath = path.join(uploadDir, file.name);
-        await file.mv(filePath);
-        uploadedFiles.push(file.name);
+        const result = await cloudinary.uploader.upload(file.tempFilePath || file.tempFilePath || file.data, {
+          folder: 'listings'
+        });
+        uploadedFiles.push(result.secure_url);
       }
     }
+    
 
     const newListing = await Listing.create({
       address: req.body.address,
@@ -47,17 +42,16 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      uploadedFiles: uploadedFiles, // save uploaded filenames array here
+      uploadedFiles: uploadedFiles, // Cloudinary URLs
     });
 
     res.status(201).json(newListing);
   } catch (error) {
     console.error("Error creating listing:", error);
-    res
-      .status(500)
-      .json({ message: "Error creating listing", error: error.message });
+    res.status(500).json({ message: "Error creating listing", error: error.message });
   }
 };
+
 
 module.exports = {
   getAllListing,

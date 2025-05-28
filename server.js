@@ -6,12 +6,12 @@ const mongoose = require('mongoose')
 const connectDB = require('./config/dbConn.js')
 const fileUpload = require('express-fileupload')
 const cors = require('cors');
+const cloudinary = require('cloudinary')
 
 
 
-app.use(fileUpload({
-  createParentPath: true,
-}));
+
+app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }))
 
 
 app.use(cors({
