@@ -7,6 +7,8 @@ const handleForm = async (e) => {
 
   const myFiles = document.getElementById("formFileMultiple").files;
 
+  console.log('moshe')
+
   Array.from(myFiles).forEach((file) => {
   formData.append("files", file);
 });
