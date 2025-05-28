@@ -1,7 +1,11 @@
+console.log('Script loaded');
+
 const listingForm = document.getElementById("listing-form");
 
 listingForm.addEventListener("submit", async (e) => {
+  
   e.preventDefault();
+  console.log('Submit event triggered');
 
   const formData = new FormData(e.target);
   const fileInput = document.getElementById("formFileMultiple");
