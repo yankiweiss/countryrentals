@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 const mailOptions = {
   from: process.env.MAIL_USERNAME,
   to: 'upstatekosherrentals@gmail.com',
-  subject: 'Nodemailer Project',
+  subject: 'A Listing Has Been Submitted And Awaiting Approval!',
   html: `
     <h1 style="color: green;">
       To go to your Listings 
@@ -27,7 +27,7 @@ const mailOptions = {
     </h1>`,
 };
 
-router.get('/send', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let info = await transporter.sendMail(mailOptions);
     res.send('Email sent: ' + info.response);
