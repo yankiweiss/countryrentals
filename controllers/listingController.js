@@ -41,9 +41,39 @@ const createNewListing = async (req, res) => {
   }
 };
 
+const updateListingStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
 
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+
+    const updatedListing = await Listing.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedListing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    res.json(updatedListing);
+  } catch (error) {
+    console.error("Error updating listing status:", error);
+    res.status(500).json({ message: "Failed to update listing status", error: error.message });
+  }
+};
 
 module.exports = {
   getAllListing,
   createNewListing,
+  updateListingStatus, // ✅ Add this
 };
+
+
+
+
+

@@ -2,9 +2,29 @@
     display: flex;
 }
 
+#admin-page{
+    text-align: center;
+    margin: 50px 0px 50px 0px;
+}
+
 .listing{
     background-color: rgb(126, 189, 243);
     border-radius: 15px;
     margin: 15px;
     text-align: center;
 }
+
+header{
+    background-color: rgb(243, 243, 243);
+  width: 98%;
+  padding: 50px;
+  margin: 5px auto;
+  border-radius: 15px;
+}
+
+.table{
+    width: 75%;
+    margin: auto;
+}
+
+ 
