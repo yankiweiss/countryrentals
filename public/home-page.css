@@ -123,6 +123,12 @@ footer {
 
 
 @media screen and (min-width: 850px) {
+
+  #post-listing a{
+    display: block;
+    margin: auto;
+    width: 10%;
+}
   .search-bar {
     display: flex;
     gap: 10px;
@@ -161,8 +167,8 @@ footer {
     padding-top: 50px;
   }
 
-  #email-suggestions{
-  width: 45%;
+  #emailForm{
+  width: 35%;
 }
 
   #areas {

@@ -84,4 +84,25 @@ listingForm.addEventListener("submit", async (e) => {
       console.error("Failed to create listing:", err);
       alert("Error submitting listing");
     });
+
+
+     await fetch("https://countryrentals.vercel.app/email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      to: "upstatekosherrentals@gmail.com", // ✅ Use key-value
+      subject: "A new Listing has been Posted waiting to get Approval",
+      message : "please get it approved",
+    }),
+  });
+
+  await fetch("https://countryrentals.vercel.app/email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      to: formData.get("email"), // email from the form
+      subject: "Your Listing Has Been Submitted",
+      message: `Hi,\n\nThanks for submitting your listing to Upstate Kosher Rentals!\nYour listing is currently pending approval. We’ll notify you once it goes live.\n\n- The Team`,
+    }),
+  });
 });
