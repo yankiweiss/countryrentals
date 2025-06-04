@@ -75,26 +75,41 @@ function toggleImages(id) {
 }
 
 
-function updateStatus(listingId, approved) {
+async function updateStatus(listingId, approved) {
   const newStatus = approved ? "approved" : "pending";
 
-  fetch(`https://countryrentals.vercel.app/listing/${listingId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ status: newStatus })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Failed to update status");
-      return res.json();
-    })
-    .then(data => {
-      console.log("Status updated:", data);
-      alert(`Status set to: ${newStatus}`);
-    })
-    .catch(err => {
-      console.error("Error updating status:", err);
-      alert("Failed to update listing status");
+  try {
+    const res = await fetch(`https://countryrentals.vercel.app/listing/${listingId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status: newStatus })
     });
+
+    if (!res.ok) throw new Error("Failed to update status");
+    const data = await res.json();
+
+    console.log("Status updated:", data);
+    alert(`Status set to: ${newStatus}`);
+
+    // Email notification after status update
+    const subject = "Your listing status has been updated";
+    const message = `Your listing with address "${data.address}" is now "${newStatus}".`;
+
+    await fetch("https://countryrentals.vercel.app/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: data.email,  // notify the owner email
+        subject,
+        message,
+      }),
+    });
+
+  } catch (err) {
+    console.error("Error updating status:", err);
+    alert("Failed to update listing status");
+  }
 }
+
