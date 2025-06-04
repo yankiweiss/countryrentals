@@ -95,7 +95,7 @@ async function updateStatus(listingId, approved) {
 
     // Email notification after status update
     const subject = "Your listing status has been updated";
-    const message = `Your listing with address "${data.address}" is now "${newStatus}".`;
+    const message = `Your listing with address "${data.address}" is now "${newStatus}". Please Proceed to below link ones it's paid `;
 
     await fetch("https://countryrentals.vercel.app/email", {
       method: "POST",
