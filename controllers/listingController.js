@@ -19,6 +19,7 @@ const getAllListing = async (req, res) => {
 const createNewListing = async (req, res) => {
   try {
 
+
     // Save listing with Cloudinary image URLs
     const newListing = await Listing.create({
       address: req.body.address,
@@ -29,7 +30,7 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      uploadedFiles: req.body.uploadedFiles// resized URLs
+      uploadedFiles: req.body.uploadedFiles  // resized URLs
     });
 
     res.status(201).json(newListing);

@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const listingSchema = new Schema({
 
     address: {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
     baths: {
         type: Number,
@@ -31,11 +31,15 @@ const listingSchema = new Schema({
         type: Number,
         required: true
     },
-    tag : {
+    tag: {
         type: String,
         required: false
     },
-     files: [String],
+    uploadedFiles:
+    {
+        type: [String],
+        required: true
+    }
 
 
 })

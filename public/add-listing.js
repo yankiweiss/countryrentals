@@ -1,5 +1,5 @@
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
-const UPLOAD_PRESET = "upsatecountryrental";// must be valid and unsigned in your Cloudinary dashboard
+const UPLOAD_PRESET = 'upsatecountryrental';// must be valid and unsigned in your Cloudinary dashboard
 
 const listingForm = document.getElementById("listing-form");
 
@@ -18,6 +18,7 @@ listingForm.addEventListener("submit", async (e) => {
       const uploadData = new FormData();
       uploadData.append("file", file);
       uploadData.append("upload_preset", UPLOAD_PRESET);
+      uploadData.append("folder", "listings");
 
       console.log(uploadData)
 
@@ -64,6 +65,8 @@ listingForm.addEventListener("submit", async (e) => {
   };
 
   console.log("Sending to backend:", backendData);
+  console.log("All uploaded URLs:", imageUrls);
+
 
   fetch("https://countryrentals.vercel.app/listing", {
     method: "POST",
