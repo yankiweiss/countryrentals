@@ -11,30 +11,45 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailOptions = {
-  from: process.env.MAIL_USERNAME,
-  to: 'upstatekosherrentals@gmail.com',
-  subject: 'A Listing Has Been Submitted And Awaiting Approval!',
-  html: `
-    <h1 style="color: green;">
-      To go to your Listings 
-      <a href="http://localhost:3000">Click here.</a>
-    </h1>
-    <br>
-    <h1 style="color: red;">
-      Or access our other projects 
-      <a href="https://full-stack-plumbing-ecomerce.vercel.app/">Click here.</a>
-    </h1>`,
-};
+function sendCustomEmail(recipient, subjectText, messageText) {
+  const mailOptions = {
+    from: process.env.MAIL_USERNAME,
+    to: recipient,
+    subject: subjectText,
+    text: messageText, // or use html: "<b>HTML version</b>"
+  };
 
-router.get('/', async (req, res) => {
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
+}
+
+
+router.post('/', async (req, res) => {
+  const { to, subject, message } = req.body;
+
+  if (!to || !subject || !message) {
+    return res.status(400).send('Missing "to", "subject", or "message"');
+  }
+
   try {
-    let info = await transporter.sendMail(mailOptions);
-    res.send('Email sent: ' + info.response);
+    const info = await transporter.sendMail({
+      from: process.env.MAIL_USERNAME,
+      to,
+      subject,
+      text: message,
+    });
+    res.status(200).send('Email sent: ' + info.response);
   } catch (err) {
     console.error('Error sending email:', err);
     res.status(500).send('Failed to send email');
   }
 });
+
 
 module.exports = router;

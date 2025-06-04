@@ -9,7 +9,11 @@ header {
   margin: 5px auto;
   border-radius: 15px;
 }
-.search-bar {
+
+.search-bar{
+  display: none;
+}
+/*.search-bar {
     display: flex;
     gap: 10px;
     padding: 10px;
@@ -58,7 +62,7 @@ header {
   width: 85%;
   outline: none;
   border: none;
-}
+}*/
 
 main {
   height: 250px;
@@ -70,6 +74,10 @@ main {
 main h1 {
   text-align: center;
   padding: 35px 0px 25px 0px;
+}
+
+#logo{
+  text-align: center;
 }
 
 
@@ -84,6 +92,10 @@ footer {
   width: 98%;
   margin: auto;
   border-radius: 15px;
+}
+
+#email-suggestions{
+  width: 80%;
 }
 
 #container {
@@ -104,7 +116,7 @@ footer {
 #post-listing a{
     display: block;
     margin: auto;
-    width: 10%;
+    width: 40%;
 }
 
 
@@ -148,6 +160,10 @@ footer {
   #header-flex {
     padding-top: 50px;
   }
+
+  #email-suggestions{
+  width: 45%;
+}
 
   #areas {
     width: 50%;
