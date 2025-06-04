@@ -7,7 +7,7 @@
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      to: "yakovw2706@gmail.com", // ✅ Use key-value
+      to: "upstatekosherrentals@gmail.com", // ✅ Use key-value
       subject,
       message,
     }),
