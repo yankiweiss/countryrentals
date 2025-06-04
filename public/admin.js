@@ -24,17 +24,21 @@ getAllListings();
 function displayListing(listings) {
   listings.forEach((listing) => {
     const div = document.createElement('div');
-
+    div.className = 'listing';
     // Generate all image tags from uploadedFiles array
     const imageHTML = listing.uploadedFiles
       .map(url => `<img src="${url}" width="200" style="margin: 5px;" />`)
       .join('');
 
     div.innerHTML = `
-      <h2>${listing.address}</h2>
+
+      <h2><strong>Address:</strong>${listing.address}</h2>
+      <p><strong>Phone:</strong> ${listing.phone}</p>
+      <p><strong>Name:</strong> ${listing.name}</p>
+      <p><strong>Email:</strong> ${listing.email}</p>
       <p><strong>Bedrooms:</strong> ${listing.bedrooms}</p>
       <p><strong>Baths:</strong> ${listing.baths}</p>
-      <p>${listing.description}</p>
+      <p><strong>Description:</strong>${listing.description}</p>
       <div>${imageHTML}</div>
     `;
 

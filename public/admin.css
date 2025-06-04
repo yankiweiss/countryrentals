@@ -1,0 +1,10 @@
+#all-listings{
+    display: flex;
+}
+
+.listing{
+    background-color: rgb(126, 189, 243);
+    border-radius: 15px;
+    margin: 15px;
+    text-align: center;
+}
