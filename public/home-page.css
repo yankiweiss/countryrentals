@@ -64,6 +64,16 @@ header {
   border: none;
 }*/
 
+#listings{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#listings img{
+  border-radius: 15px;
+}
+
 main {
   height: 250px;
   background-color: rgb(237, 250, 255);

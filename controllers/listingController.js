@@ -70,7 +70,7 @@ const updateListingStatus = async (req, res) => {
 module.exports = {
   getAllListing,
   createNewListing,
-  updateListingStatus, // ✅ Add this
+  updateListingStatus, 
 };
 
 

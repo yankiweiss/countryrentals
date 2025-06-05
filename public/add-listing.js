@@ -106,3 +106,27 @@ listingForm.addEventListener("submit", async (e) => {
     }),
   });
 });
+
+
+
+    function initMap() {
+      
+
+      // Initialize the autocomplete field
+      const input = document.getElementById("address-input");
+      autocomplete = new google.maps.places.Autocomplete(input);
+
+      // Listen for place selection
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry || !place.geometry.location) {
+          window.alert("No details available for input '" + place.name + "'");
+          return;
+        }
+
+        // Center the map and add a marker
+       
+      });
+    }
+

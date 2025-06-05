@@ -11,16 +11,18 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./add-listing.css" />
-  </head>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQtDWwXbmDG0wHdTZ4wNyDIR33hOsZeY&libraries=places&callback=initMap" async defer></script>
+   
+</head>
 
   <body>
     <div id="logo">
       <h1>UPSTATE KOSHER RENTALS</h1>
     </div>
 
-    <div id="container" >
+    <div id="container">
       <form id="listing-form" enctype="multipart/form-data">
-        <!-- Name input -->
+        
         <div class="form-floating mb-2 row">
           <input
             type="text"
@@ -32,7 +34,7 @@
           <label for="nameInput">Name...</label>
         </div>
 
-        <!-- Email input -->
+       
         <div class="form-floating mb-2 row">
           <input
             type="email"
@@ -59,12 +61,13 @@
           <input
             type="text"
             class="form-control"
-            id="address"
-            placeholder="Address"
-            name="address"
+            id="address-input"
+            placeholder="Phone Number"
+            name="phone"
           />
           <label for="phoneInput">Address:</label>
         </div>
+
 
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -132,8 +135,6 @@
       </form>
     </div>
 
-
-
     <footer>
       <h1>Contact Information</h1>
       <p>Phone:<a href="tel:9178317025">917-831-7025</a></p>
@@ -143,6 +144,7 @@
         >
       </p>
     </footer>
+
 
     <script src="./add-listing.js"></script>
   </body>
