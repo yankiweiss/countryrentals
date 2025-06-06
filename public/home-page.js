@@ -12,7 +12,7 @@ function displayHomeListings(listings) {
     const div = document.createElement("div");
     div.className = "listing";
     div.innerHTML = `
-      <img src="${listing.uploadedFiles[0]}" width="200" style="margin: 5px;" />
+      <img src="${listing.uploadedFiles[0]}" width="250" style="margin: 5px;" />
         <h5>${listing.address}</h5>`;
     listingSection.appendChild(div);
   });
