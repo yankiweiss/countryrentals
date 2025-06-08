@@ -8,6 +8,8 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const cloudinary = require("cloudinary");
 
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use(
@@ -24,7 +26,7 @@ app.use(
     origin: "*", // or '*' for all, or use an array for multiple origins
   })
 );
-app.use(express.static(path.join(__dirname, "public")));
+
 
 app.use("/listing", require("./routes/api/listing.js"));
 

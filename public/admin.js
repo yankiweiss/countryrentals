@@ -9,8 +9,7 @@ function getAllListings() {
   })
     .then((res) => res.json())
     .then((data) => {
-      displayListing(data);
-      console.log(data);
+      displayListing(data)
       // You can now render the listings on the page here
     })
     .catch((err) => {
@@ -33,26 +32,27 @@ function displayListing(listings) {
     // Unique ID for each image container
     const imageContainerId = `image-container-${index}`;
 
+    // Dropdown options with current status selected
+    const statusOptions = ['Approved', 'Rejected', 'pending'];
+    const optionsHTML = statusOptions.map(status => {
+      const selected = listing.status === status ? 'selected' : '';
+      return `<option value="${status}" ${selected}>${status}</option>`;
+    }).join('');
+
     row.innerHTML = `
       <td>
-    <input 
-      class="form-check-input" 
-      type="checkbox" 
-      value="" 
-      id="check-${index}" 
-      onchange="updateStatus('${listing._id}', this.checked)"
-    />
-  </td>
+        <select class="form-select" aria-label="Status select" onchange="updateStatus('${listing._id}', this.value)">
+          <option disabled>Status:</option>
+          ${optionsHTML}
+        </select>
+      </td>
       <td>${listing.address}</td>
       <td>${listing.description}</td>
-       <td>${listing.email}</td>
-       <td>${listing.name}</td>
+      <td>${listing.email}</td>
+      <td>${listing.name}</td>
       <td>${listing.phone}</td>
       <td>${listing.baths}</td>
-      
       <td>${listing.bedrooms}</td>
-     
-     
       <td>
         <button onclick="toggleImages('${imageContainerId}')">Show Images</button>
         <div id="${imageContainerId}" style="display: none; margin-top: 5px;">
@@ -65,6 +65,8 @@ function displayListing(listings) {
   });
 }
 
+
+
 function toggleImages(id) {
   const container = document.getElementById(id);
   if (container.style.display === 'none') {
@@ -75,9 +77,7 @@ function toggleImages(id) {
 }
 
 
-async function updateStatus(listingId, approved) {
-  const newStatus = approved ? "approved" : "pending";
-
+async function updateStatus(listingId, newStatus) {
   try {
     const res = await fetch(`https://countryrentals.vercel.app/listing/${listingId}`, {
       method: "PUT",
@@ -91,17 +91,17 @@ async function updateStatus(listingId, approved) {
     const data = await res.json();
 
     console.log("Status updated:", data);
-    alert(`Status set to: ${newStatus}`);
+    alert(`Status updated to: ${newStatus}`);
 
-    // Email notification after status update
+    // Email notification
     const subject = "Your listing status has been updated";
-    const message = `Your listing with address "${data.address}" is now "${newStatus}". Please Proceed to below link ones it's paid `;
+    const message = `Your listing at "${data.address}" is now marked as "${newStatus}".`;
 
     await fetch("https://countryrentals.vercel.app/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        to: data.email,  // notify the owner email
+        to: data.email,
         subject,
         message,
       }),
@@ -112,4 +112,3 @@ async function updateStatus(listingId, approved) {
     alert("Failed to update listing status");
   }
 }
-
