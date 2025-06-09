@@ -8,6 +8,8 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const cloudinary = require("cloudinary");
 
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
@@ -18,7 +20,7 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "10mb" }));
+
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.use(

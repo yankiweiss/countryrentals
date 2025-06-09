@@ -12,8 +12,17 @@ function displayHomeListings(listings) {
     const div = document.createElement("div");
     div.className = "listing";
     div.innerHTML = `
-      <img src="${listing.uploadedFiles[0]}" width="250" style="margin: 5px;" />
-        <h5>${listing.address}</h5>`;
+      <a href="listing.html?id=${listing._id}" style="text-decoration: none; color: inherit;">
+        <img src="${listing.uploadedFiles[0]}" width="250" style="margin: 5px;" />
+        <h5>${listing.address}</h5>
+        <h5>
+          <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
+          <span style="margin-left: 10px;">
+            <strong><i>Baths:</i></strong> ${listing.baths}
+          </span>
+        </h5>
+      </a>
+    `;
     listingSection.appendChild(div);
   });
 }
@@ -34,3 +43,5 @@ document.getElementById("emailForm").addEventListener("submit", async (e) => {
   alert("Thanks for Emailing us!");
   document.getElementById("message").value = "";
 });
+
+
