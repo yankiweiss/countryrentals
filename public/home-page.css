@@ -3,9 +3,9 @@
 }
 
 header {
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(249, 249, 249);
   width: 98%;
-  padding: 50px;
+  padding: 35px 0px;
   margin: 5px auto;
   border-radius: 15px;
 }
@@ -86,9 +86,7 @@ main h1 {
   padding: 35px 0px 25px 0px;
 }
 
-#logo{
-  text-align: center;
-}
+
 
 
 
@@ -128,7 +126,9 @@ footer {
     margin: auto;
     width: 40%;
 }
-
+#logo img{
+  height: 145px;
+}
 
 
 
@@ -169,16 +169,17 @@ footer {
     cursor: pointer;
   }
 
-  #logo {
-    float: left;
-    padding: 25px;
-  }
-  #header-flex {
-    padding-top: 50px;
-  }
+  
+  
 
   #emailForm{
   width: 35%;
+}
+
+#logo img{
+  width: 1500px !important;
+  margin: auto !important;
+  display: block;
 }
 
   #areas {
