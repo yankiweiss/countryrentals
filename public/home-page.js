@@ -13,37 +13,43 @@ async function fetchListings() {
 
 async function displayHomeListings(listings) {
   for (const listing of listings) {
+    const link = document.createElement("a");
+    link.href = `listing.html?id=${listing._id}`;
+    link.style.textDecoration = "none";
+    link.style.color = "inherit";
+    link.style.display = "block"; // Ensures full card is clickable
+
     const div = document.createElement("div");
     div.className = "listing";
-    
+
     const image = new Image();
     image.src = listing.uploadedFiles[0];
     image.width = 250;
     image.style.margin = "5px";
 
-    // Wait for image to load before appending
     await new Promise((resolve, reject) => {
       image.onload = resolve;
       image.onerror = () => {
         console.warn("Image failed to load:", image.src);
-        resolve(); // still resolve to continue
+        resolve();
       };
     });
 
-    div.innerHTML = `
-      <a href="listing.html?id=${listing._id}" style="text-decoration: none; color: inherit;">
-        <h5 style="text-align: center;">${listing.street}</h5>
-        <h5 style="text-align: center;">
-          <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
-          <span style="margin-left: 10px;">
-            <strong><i>Baths:</i></strong> ${listing.baths}
-          </span>
-        </h5>
-      </a>
+    const content = `
+      <h5 style="text-align: center;">${listing.street}</h5>
+      <h5 style="text-align: center;">
+        <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
+        <span style="margin-left: 10px;">
+          <strong><i>Baths:</i></strong> ${listing.baths}
+        </span>
+      </h5>
     `;
 
-    div.insertBefore(image, div.firstChild);
-    listingSection.appendChild(div);
+    div.appendChild(image);
+    div.insertAdjacentHTML("beforeend", content);
+
+    link.appendChild(div);
+    listingSection.appendChild(link);
   }
 }
 
