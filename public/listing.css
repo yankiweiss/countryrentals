@@ -41,7 +41,14 @@ footer {
 }
 
 
-
+#gallery-overlay img {
+  border-radius: 10px;
+  box-shadow: 0 0 10px #fff;
+  transition: transform 0.3s;
+}
+#gallery-overlay img:hover {
+  transform: scale(1.05);
+}
 
 
 @media screen and (min-width: 850px) {
