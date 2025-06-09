@@ -14,8 +14,8 @@ function displayHomeListings(listings) {
     div.innerHTML = `
       <a href="listing.html?id=${listing._id}" style="text-decoration: none; color: inherit;">
         <img src="${listing.uploadedFiles[0]}" width="250" style="margin: 5px;" />
-        <h5>${listing.address}</h5>
-        <h5>
+        <h5 style="text-align: center;">${listing.street}</h5>
+        <h5 style="text-align: center;">
           <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
           <span style="margin-left: 10px;">
             <strong><i>Baths:</i></strong> ${listing.baths}
