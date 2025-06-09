@@ -1,5 +1,5 @@
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload';
-const UPLOAD_PRESET = "upsatecountryrental";// must be valid and unsigned in your Cloudinary dashboard
+const UPLOAD_PRESET = "upsatecountryrental"; // must be valid and unsigned in your Cloudinary dashboard
 
 const listingForm = document.getElementById("listing-form");
 
@@ -19,8 +19,6 @@ listingForm.addEventListener("submit", async (e) => {
       uploadData.append("file", file);
       uploadData.append("upload_preset", UPLOAD_PRESET);
       uploadData.append("folder", "listings");
-
-      console.log(uploadData)
 
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: "POST",
@@ -52,9 +50,19 @@ listingForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Split address into parts
+  const fullAddress = formData.get("address") || "";
+  const parts = fullAddress.split(",").map(p => p.trim());
+  const street = parts[0] || "";
+  const city = parts[1] || "";
+  const state = parts[2] || "";
+
   const backendData = {
     name: formData.get("name"),
-    address: formData.get("address"),
+    address: fullAddress,
+    street,
+    city,
+    state,
     baths: formData.get("baths"),
     bedrooms: formData.get("bedrooms"),
     email: formData.get("email"),
@@ -65,68 +73,62 @@ listingForm.addEventListener("submit", async (e) => {
   };
 
   console.log("Sending to backend:", backendData);
-  console.log("All uploaded URLs:", imageUrls);
 
-
-  fetch("https://countryrentals.vercel.app/listing", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(backendData)
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Listing created:", data);
-      alert("Listing submitted successfully!");
-    })
-    .catch(err => {
-      console.error("Failed to create listing:", err);
-      alert("Error submitting listing");
+  try {
+    const listingRes = await fetch("https://countryrentals.vercel.app/listing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(backendData)
     });
 
+    const listingData = await listingRes.json();
+    console.log("Listing created:", listingData);
+    alert("Listing submitted successfully!");
 
-     await fetch("https://countryrentals.vercel.app/email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      to: "upstatekosherrentals@gmail.com", // ✅ Use key-value
-      subject: "A new Listing has been Posted waiting to get Approval",
-      message : "please get it approved",
-    }),
-  });
+    // Notify admin
+    await fetch("https://countryrentals.vercel.app/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: "upstatekosherrentals@gmail.com",
+        subject: "A new Listing has been Posted waiting to get Approval",
+        message: "please get it approved",
+      }),
+    });
 
-  await fetch("https://countryrentals.vercel.app/email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      to: formData.get("email"), // email from the form
-      subject: "Your Listing Has Been Submitted",
-      message: `Hi,\n\nThanks for submitting your listing to Upstate Kosher Rentals!\nYour listing is currently pending approval. We’ll notify you once it goes live.\n\n- The Team`,
-    }),
-  });
+    // Notify user
+    await fetch("https://countryrentals.vercel.app/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: formData.get("email"),
+        subject: "Your Listing Has Been Submitted",
+        message: `Hi,\n\nThanks for submitting your listing to Upstate Kosher Rentals!\nYour listing is currently pending approval. We’ll notify you once it goes live.\n\n- The Team`,
+      }),
+    });
+
+  } catch (err) {
+    console.error("Failed to submit listing or send emails:", err);
+    alert("Error submitting listing. Please try again.");
+  }
 });
 
 
 
-    function initMap() {
-      
+   window.initMap = function () {
+  const input = document.getElementById("address-input");
+  autocomplete = new google.maps.places.Autocomplete(input);
 
-      // Initialize the autocomplete field
-      const input = document.getElementById("address-input");
-      autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.addListener("place_changed", () => {
+    const place = autocomplete.getPlace();
 
-      // Listen for place selection
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-
-        if (!place.geometry || !place.geometry.location) {
-          window.alert("No details available for input '" + place.name + "'");
-          return;
-        }
-
-        // Center the map and add a marker
-       
-      });
+    if (!place.geometry || !place.geometry.location) {
+      window.alert("No details available for input '" + place.name + "'");
+      return;
     }
 
+    // You can optionally do more with the location here
+  });
+};

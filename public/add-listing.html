@@ -16,9 +16,11 @@
 </head>
 
   <body>
-    <div id="logo">
-      <h1>UPSTATE KOSHER RENTALS</h1>
-    </div>
+    <header>
+     <div id="logo">
+        <img src="/images/logo-transparent-png.png">
+      </div>
+      </header>
 
     <div id="container">
       <form id="listing-form" enctype="multipart/form-data">
@@ -65,7 +67,7 @@
             placeholder="Phone Number"
             name="address"
           />
-          <label for="phoneInput">Address:</label>
+          <label for="address">Address:</label>
         </div>
 
 
@@ -98,7 +100,8 @@
             class="form-control"
             type="file"
             id="files"
-            accept="image/*"
+             accept=".jpg,.jpeg,.png"
+           
             multiple
           />
         </div>
@@ -135,15 +138,26 @@
       </form>
     </div>
 
-    <footer>
-      <h1>Contact Information</h1>
-      <p>Phone:<a href="tel:9178317025">917-831-7025</a></p>
-      <p>
-        Email:<a href="mailto:Yakovw2706@gmail.com"
-          >support@upsaterentals.com</a
-        >
-      </p>
+   <footer>
+      <form id="emailForm">
+        <div style="text-align: center">
+          <label for="message" class="form-label"
+            >Let Us Know What We Can Do Better!</label
+          >
+        </div>
+
+        <textarea
+          class="form-control m-3"
+          id="message"
+          placeholder="Your message"
+          rows="4"
+        ></textarea>
+        <div style="text-align: center;">
+                  <button class="btn btn-success" type="submit">Send</button>
+                  </div>
+      </form>
     </footer>
+
 
 
     <script src="./add-listing.js"></script>

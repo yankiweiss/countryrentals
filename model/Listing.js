@@ -6,6 +6,10 @@ const listingSchema = new Schema({
     type: String,
     required: true,
   },
+  street: { type: String, required: false },
+  city: { type: String, required: false },
+  state: { type: String, required: false },
+
   baths: {
     type: Number,
     required: true,

@@ -1,19 +1,26 @@
-#logo{
-    background-color: rgb(243, 243, 243);
-    padding: 50px;
-    text-align: center;
-    border-radius: 15px;
-    margin-bottom: 35px;
+#logo img {
+  width: 100%;
 }
 
-form{
-    width: 75%;
-    margin: auto;
+form {
+  width: 75%;
+  margin: auto;
 }
 
- #emailInput, #nameInput, #phoneInput, #address, #description{
-    border-radius: 12px;
-    
+header {
+  background-color: rgb(249, 249, 249);
+  width: 98%;
+  padding: 0px 0px 0px 0px;
+  margin: 0px auto 25px;
+  border-radius: 15px;
+}
+
+#emailInput,
+#nameInput,
+#phoneInput,
+#address,
+#description {
+  border-radius: 12px;
 }
 
 footer {
@@ -28,30 +35,67 @@ footer {
   border-radius: 15px;
 }
 
-#container-big{
-        display: none;
-    }
-
-
-@media screen and (min-width: 850px){
-    #container{
-        width: 40%;
-        margin: auto;
-    }
-
-    
-
-   
-    
-   
-    form{
-        width: 55%;
-        margin: auto;
-    }
-    
+#container-big {
+  display: none;
 }
 
+@media screen and (min-width: 850px) {
+  #container {
+    width: 40%;
+    margin: auto;
+  }
 
+  form {
+    width: 55%;
+    margin: auto;
+  }
+  #post-listing a {
+    display: block;
+    margin: auto;
+    width: 10%;
+  }
+  .search-bar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 999px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    max-width: 905px;
+    margin: 15px auto;
+  }
 
+  .search-bar input,
+  .search-bar select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    outline: none;
+    font-size: 14px;
+  }
 
+  .search-bar button {
+    background-color: rgba(51, 51, 253, 0.753);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
 
+  #emailForm {
+    width: 35%;
+  }
+
+  #logo img {
+    width: 80%;
+    margin: auto;
+    display: block;
+    height: 550px;
+  }
+
+  #areas {
+    width: 50%;
+  }
+}

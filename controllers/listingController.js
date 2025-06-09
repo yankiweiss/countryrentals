@@ -18,11 +18,12 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
-
-
     // Save listing with Cloudinary image URLs
     const newListing = await Listing.create({
       address: req.body.address,
+      street: req.body.street,
+      city: req.body.city,
+      state: req.body.state,
       baths: req.body.baths,
       bedrooms: req.body.bedrooms,
       description: req.body.description,
@@ -30,14 +31,15 @@ const createNewListing = async (req, res) => {
       name: req.body.name,
       phone: req.body.phone,
       tag: req.body.tag,
-      uploadedFiles: req.body.uploadedFiles  // resized URLs
+      uploadedFiles: req.body.uploadedFiles,
     });
 
     res.status(201).json(newListing);
-
   } catch (error) {
     console.error("Error creating listing:", error);
-    res.status(500).json({ message: "Error creating listing", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error creating listing", error: error.message });
   }
 };
 
@@ -63,7 +65,12 @@ const updateListingStatus = async (req, res) => {
     res.json(updatedListing);
   } catch (error) {
     console.error("Error updating listing status:", error);
-    res.status(500).json({ message: "Failed to update listing status", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Failed to update listing status",
+        error: error.message,
+      });
   }
 };
 
@@ -87,11 +94,6 @@ const getListingById = async (req, res) => {
 module.exports = {
   getAllListing,
   createNewListing,
-  updateListingStatus, 
-  getListingById
+  updateListingStatus,
+  getListingById,
 };
-
-
-
-
-
