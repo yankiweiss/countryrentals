@@ -4,8 +4,12 @@ const UPLOAD_PRESET = "upsatecountryrental"; // must be valid and unsigned in yo
 
 const listingForm = document.getElementById("listing-form");
 
+const spinner = document.getElementById("form-spinner");
+
 listingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  spinner.style.display = "inline-block";
 
   const formData = new FormData(listingForm);
   const files = document.getElementById("files").files;
@@ -121,5 +125,7 @@ listingForm.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to submit listing or send emails:", err);
     alert("Error submitting listing. Please try again.");
+  }finally {
+    spinner.style.display = "none"; // Hide spinner
   }
 });

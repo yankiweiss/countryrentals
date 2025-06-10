@@ -43,6 +43,8 @@
   <div id="container">
     <form id="listing-form" enctype="multipart/form-data">
 
+      
+
       <div class="form-floating mb-2 row">
         <input type="text" class="form-control form-control-sm" id="nameInput" placeholder="Name" name="name" />
         <label for="nameInput">Name...</label>
@@ -116,6 +118,10 @@
           <label for="baths">Baths:</label>
         </div>
       </div>
+
+      <div id="form-spinner" class="spinner-grow text-primary" role="status" style="display: none;">
+  <span class="visually-hidden">Loading...</span>
+</div>
 
       <div class="d-flex justify-content-center m-3">
         <button type="submit" class="btn btn-primary" id="submit">
