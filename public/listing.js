@@ -19,20 +19,27 @@ function displayListing(listing) {
   const firstImage = listing.uploadedFiles?.[0] || "";
 
   div.innerHTML = `
+
+  <h5>${listing.tag}</h5><br>
     <img 
       id="main-listing-image" 
       src="${firstImage}" 
       alt="Main listing image"
     /><br>
     <h5><span class="title">Address:</span>  ${listing.address}</h5><br>
-    <h5>
+    
+
+    <h5><span class="title">Description:</span> ${listing.description}</h5><br>
+
+    <hr style="width: 500px; margin: auto;">
+    <br>
+
+     <h5>
       <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
       <span style="margin-left: 10px;">
         <strong><i>Baths:</i></strong> ${listing.baths}
       </span>
     </h5><br>
-
-    <h5><span class="title">Description:</span> ${listing.description}</h5><br>
     
     <h5><span class="title">Available From:</span>  ${formatDateToMMDDYY(listing.availableFrom)}</h5>
     
@@ -40,11 +47,20 @@ function displayListing(listing) {
 
     <br>
 
+    <hr style="width: 500px; margin: auto;">
+
+    <br>
+
     <h5>Owners Details:</h5>
 
     <h5><span class="title">Email:</span>  ${listing.email}</h5>
+    <br>
 
     <h5><span class="title">Phone:</span>  ${listing.phone}</h5><br>
+
+    <hr style="width: 500px; margin: auto;">
+
+    <br>
    
   `;
 
