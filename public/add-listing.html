@@ -11,16 +11,34 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./add-listing.css" />
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQtDWwXbmDG0wHdTZ4wNyDIR33hOsZeY&libraries=places"></script>
+    <script>
+      function initAutocomplete() {
+        const input = document.getElementById('search_input');
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+          types: ['geocode'],
+          componentRestrictions: { country: 'us' }
+        });
 
-<!-- Load the Web Component for Place Autocomplete -->
-<script type="module" src="https://www.unpkg.com/@googlemaps/places-autocomplete-element"></script>
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();         
+        });
+      }
+    </script>
 
+
+    <script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQtDWwXbmDG0wHdTZ4wNyDIR33hOsZeY&libraries=places&callback=initAutocomplete">
+</script>
    
-   
+    
+  
 </head>
 
   <body>
+
+    
     <header>
      <div id="logo">
         <img src="/images/logo-transparent-png.png">
@@ -68,18 +86,14 @@
           <input
             type="text"
             class="form-control"
-            id="address-input"
+            id="search_input"
             placeholder="Phone Number"
             name="address"
           />
           <label for="address">Address:</label>
         </div>
 
-        <gmpx-place-autocomplete id="autocomplete" style="width: 100%; max-width: 400px;"></gmpx-place-autocomplete>
-
-        <input type="text" id="address" name="address" />
-
-<!-- Hidden or bound text field to store the address -->
+        
 
 
 
@@ -170,13 +184,7 @@
       </form>
     </footer>
 
-<script>
-  document.getElementById("autocomplete").addEventListener("gmpx-place-select", (event) => {
-  const place = event.detail;
-  document.getElementById("address").value = place.formatted_address || place.displayName || "";
-});
-</script>
-
+ 
     <script src="./add-listing.js"></script>
   </body>
 </html>
