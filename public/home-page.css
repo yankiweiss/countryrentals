@@ -2,6 +2,22 @@
   margin: 0px;
 }
 
+.city-section{
+  margin-bottom: 60px;
+  width: 100%;
+
+}
+
+.city-heading{
+  font-size: 30px;
+  margin: 20px 0px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+
+
 header {
   background-color: rgb(249, 249, 249);
   width: 98%;
@@ -10,7 +26,7 @@ header {
   border-radius: 15px;
 }
 
-#logo img{
+#logo img {
   width: 100%;
 }
 
@@ -18,15 +34,30 @@ header {
   display: none;
 }
 
-
 #listings {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+.listing-row{
+  width: 80%;
+  margin: 25px auto;
+}
 
+.listing-row img{
+  width: 100%;
+}
+
+.listing-card{
+  margin-bottom: 15px;
+}
+
+.listing-row a{
+  margin-bottom: 50px;
+}
 #listings img {
-  border-radius: 15px;
+  border-radius: 8px;
+
 }
 
 main {
@@ -79,7 +110,47 @@ footer {
   width: 40%;
 }
 
+.heading{
+    color: rgb(58, 183, 255);
+  }
+
 @media screen and (min-width: 850px) {
+
+  .listing-row{
+    display: flex;
+    flex-wrap: wrap ;
+  }
+
+  .city-section{
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.listing-card{
+  margin-bottom: 50px;
+  width: 95%;
+}
+
+.city-heading{
+  font-size: 30px;
+  margin: 20px 0px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+  .city-heading{
+    color: rgb(58, 183, 255);
+  }
+  #listings{
+    width: 70%;
+    margin: auto;
+  }
+  .listing img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
   #post-listing a {
     display: block;
     margin: auto;

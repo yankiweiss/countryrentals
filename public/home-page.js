@@ -12,48 +12,97 @@ async function fetchListings() {
 }
 
 async function displayHomeListings(listings) {
+  const listingsByCity = {};
+
+  // Group listings by city
   for (const listing of listings) {
-    const link = document.createElement("a");
-    link.href = `listing.html?id=${listing._id}`;
-    link.style.textDecoration = "none";
-    link.style.color = "inherit";
-    link.style.display = "block"; // Ensures full card is clickable
+    const city = listing.city?.trim() || "Other";
+    if (!listingsByCity[city]) {
+      listingsByCity[city] = [];
+    }
+    listingsByCity[city].push(listing);
+  }
 
-    const div = document.createElement("div");
-    div.className = "listing";
+  // Clear previous listings
+  listingSection.innerHTML = "";
 
-    const image = new Image();
-    image.src = listing.uploadedFiles[0];
-    image.width = 250;
-    image.style.margin = "5px";
+  // Build a section for each city
+  for (const city in listingsByCity) {
+    // SECTION for the city
+    const citySection = document.createElement("section");
+    citySection.className = "city-section";
+    
 
-    await new Promise((resolve, reject) => {
-      image.onload = resolve;
-      image.onerror = () => {
-        console.warn("Image failed to load:", image.src);
-        resolve();
-      };
-    });
+    // Heading
+    const heading = document.createElement("h2");
+    heading.textContent = `Popular Rentals in ${city}.`;
+    heading.className = 'city-heading'
 
-    const content = `
-      <h5 style="text-align: center;">${listing.street}</h5>
-      <h5 style="text-align: center;">
-        <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
-        <span style="margin-left: 10px;">
-          <strong><i>Baths:</i></strong> ${listing.baths}
-        </span>
-      </h5>
-    `;
+    
+   
+    
 
-    div.appendChild(image);
-    div.insertAdjacentHTML("beforeend", content);
+    // Listings Row
+    const listingRow = document.createElement("div");
+    listingRow.className = "listing-row";
+    
 
-    link.appendChild(div);
-    listingSection.appendChild(link);
+    // Add each listing to this city's row
+    for (const listing of listingsByCity[city]) {
+      const link = document.createElement("a");
+      link.href = `listing.html?id=${listing._id}`;
+      link.style.textDecoration = "none";
+      link.style.color = "inherit";
+      link.style.width = "250px";
+
+      const card = document.createElement("div");
+      card.className = "listing-card";
+      card.style.border = "1px solid #ccc";
+      card.style.borderRadius = "10px";
+      card.style.overflow = "hidden";
+      card.style.boxShadow = "5px 10px 7px rgba(76, 154, 255, 0.1)";
+      card.style.backgroundColor = "#fff";
+
+      const img = new Image();
+      img.src = listing.uploadedFiles?.[0] || "fallback.jpg";
+      img.width = 250;
+      img.height = 150;
+      img.style.objectFit = "cover";
+      img.style.display = "block";
+
+      await new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = () => {
+          console.warn("Image failed to load:", img.src);
+          resolve();
+        };
+      });
+
+      const content = `
+        <div style="padding: 10px;">
+          <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
+          <p style="text-align: center; margin: 8px 0;">
+            <strong>Bedrooms:</strong> ${listing.bedrooms}
+            <strong style="margin-left: 10px;">Baths:</strong> ${listing.baths}
+          </p>
+        </div>
+      `;
+
+      card.appendChild(img);
+      card.insertAdjacentHTML("beforeend", content);
+      link.appendChild(card);
+      listingRow.appendChild(link);
+    }
+
+    citySection.appendChild(heading);
+    citySection.appendChild(listingRow);
+    listingSection.appendChild(citySection);
   }
 }
 
 fetchListings();
+
+// Email in the bottom going to upstatekosherlisting
 
 document.getElementById("emailForm").addEventListener("submit", async (e) => {
   e.preventDefault();
