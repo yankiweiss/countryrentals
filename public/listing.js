@@ -11,7 +11,7 @@ fetch(`https://countryrentals.vercel.app/listing/${listingId}`)
   });
 
 
-  function displayListing(listing) {
+function displayListing(listing) {
   const div = document.createElement("div");
   div.className = "listing";
 
@@ -24,7 +24,7 @@ fetch(`https://countryrentals.vercel.app/listing/${listingId}`)
       src="${firstImage}" 
       alt="Main listing image"
     /><br>
-    <h5>${listing.address}</h5><br>
+    <h5><span class="title">Address:</span>  ${listing.address}</h5><br>
     <h5>
       <strong><i>Bedrooms:</i></strong> ${listing.bedrooms}
       <span style="margin-left: 10px;">
@@ -32,12 +32,22 @@ fetch(`https://countryrentals.vercel.app/listing/${listingId}`)
       </span>
     </h5><br>
 
+    <h5><span class="title">Description:</span> ${listing.description}</h5><br>
+    
+    <h5><span class="title">Available From:</span>  ${formatDateToMMDDYY(listing.availableFrom)}</h5>
+    
+    <h5><span class="title">Available Until:</span>  ${formatDateToMMDDYY(listing.availableUntil)}</h5>
+
+    <br>
+
     <h5>Owners Details:</h5>
 
-    <h5>Email: ${listing.email}</h5>
+    <h5><span class="title">Email:</span>  ${listing.email}</h5>
 
-    <h5>Email: ${listing.phone}</h5><br>
+    <h5><span class="title">Phone:</span>  ${listing.phone}</h5><br>
+   
   `;
+
 
   listingDisplay.appendChild(div);
 
@@ -80,3 +90,14 @@ function showImageGallery(images) {
 
   document.body.appendChild(overlay);
 }
+
+
+function formatDateToMMDDYY(dateString) {
+  const date = new Date(dateString);
+  const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const dd = String(date.getDate()).padStart(2, '0');
+  const yy = String(date.getFullYear()).slice(-2);
+  return `${mm}/${dd}/${yy}`;
+}
+
+
