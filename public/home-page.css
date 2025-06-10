@@ -114,6 +114,10 @@ footer {
     color: rgb(58, 183, 255);
   }
 
+  .city-heading{
+    color: rgb(0, 132, 209);
+  }
+
 @media screen and (min-width: 850px) {
 
   .listing-row{
