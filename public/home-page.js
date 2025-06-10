@@ -57,7 +57,7 @@ async function displayHomeListings(listings) {
 
       const card = document.createElement("div");
       card.className = "listing-card";
-      card.style.border = "1px solid #ccc";
+      card.style.border = "1px solid rgba(0, 45, 104, 0.1)";
       card.style.borderRadius = "10px";
       card.style.overflow = "hidden";
       card.style.boxShadow = "5px 10px 7px rgba(76, 154, 255, 0.1)";
