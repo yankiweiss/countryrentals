@@ -50,6 +50,10 @@ footer {
   transform: scale(1.05);
 }
 
+.title{
+    color: rgb(0, 84, 163);
+  }
+
 
 @media screen and (min-width: 850px) {
 
