@@ -46,6 +46,12 @@ const listingSchema = new Schema({
     type: String,
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
+  },availableFrom: {
+    type: Date,
+    required: true,
+  },availableUntil: {
+    type: Date,
+    required: true,
   },
 });
 

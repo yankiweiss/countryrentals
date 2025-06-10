@@ -18,12 +18,15 @@ const getAllListing = async (req, res) => {
 
 const createNewListing = async (req, res) => {
   try {
+    
     // Save listing with Cloudinary image URLs
     const newListing = await Listing.create({
       address: req.body.address,
       street: req.body.street,
       city: req.body.city,
       state: req.body.state,
+      availableFrom: req.body.availableFrom,
+      availableUntil: req.body.availableUntil,
       baths: req.body.baths,
       bedrooms: req.body.bedrooms,
       description: req.body.description,
