@@ -11,7 +11,12 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./add-listing.css" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQtDWwXbmDG0wHdTZ4wNyDIR33hOsZeY&libraries=places&callback=initMap" async defer></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQtDWwXbmDG0wHdTZ4wNyDIR33hOsZeY&libraries=places"></script>
+
+<!-- Load the Web Component for Place Autocomplete -->
+<script type="module" src="https://www.unpkg.com/@googlemaps/places-autocomplete-element"></script>
+
+   
    
 </head>
 
@@ -69,6 +74,13 @@
           />
           <label for="address">Address:</label>
         </div>
+
+        <gmpx-place-autocomplete id="autocomplete" style="width: 100%; max-width: 400px;"></gmpx-place-autocomplete>
+
+        <input type="text" id="address" name="address" />
+
+<!-- Hidden or bound text field to store the address -->
+
 
 
         <div class="mb-3">
@@ -159,21 +171,10 @@
     </footer>
 
 <script>
-  window.initMap = function () {
-  const input = document.getElementById("address-input");
-  autocomplete = new google.maps.places.Autocomplete(input);
-
-  autocomplete.addListener("place_changed", () => {
-    const place = autocomplete.getPlace();
-
-    if (!place.geometry || !place.geometry.location) {
-      window.alert("No details available for input '" + place.name + "'");
-      return;
-    }
-
-    // You can optionally do more with the location here
-  });
-};
+  document.getElementById("autocomplete").addEventListener("gmpx-place-select", (event) => {
+  const place = event.detail;
+  document.getElementById("address").value = place.formatted_address || place.displayName || "";
+});
 </script>
 
     <script src="./add-listing.js"></script>
