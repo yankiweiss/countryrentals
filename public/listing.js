@@ -29,7 +29,7 @@ function displayListing(listing) {
     <h5><span class="title">Address:</span>  ${listing.address}</h5><br>
     
 
-    <h5><span class="title">Description:</span> ${listing.description}</h5><br>
+    <h5 style="width: 60%; margin: auto;"><span class="title">Description:</span> ${listing.description}</h5><br>
 
     <hr style="width: 500px; margin: auto;">
     <br>
