@@ -2,21 +2,18 @@
   margin: 0px;
 }
 
-.city-section{
+.city-section {
   margin-bottom: 60px;
   width: 100%;
-
 }
 
-.city-heading{
+.city-heading {
   font-size: 30px;
   margin: 20px 0px;
   border-bottom: 1px solid #333;
   padding-bottom: 10px;
   text-align: left;
 }
-
-
 
 header {
   background-color: rgb(249, 249, 249);
@@ -39,25 +36,24 @@ header {
   flex-wrap: wrap;
   justify-content: center;
 }
-.listing-row{
+.listing-row {
   width: 80%;
   margin: 25px auto;
 }
 
-.listing-row img{
+.listing-row img {
   width: 100%;
 }
 
-.listing-card{
+.listing-card {
   margin-bottom: 15px;
 }
 
-.listing-row a{
+.listing-row a {
   margin-bottom: 50px;
 }
 #listings img {
   border-radius: 8px;
-
 }
 
 main {
@@ -110,43 +106,62 @@ footer {
   width: 40%;
 }
 
-.heading{
-    color: rgb(58, 183, 255);
-  }
+.heading {
+  color: rgb(58, 183, 255);
+}
 
-  .city-heading{
-    color: rgb(0, 132, 209);
-  }
+.city-heading {
+  color: rgb(0, 132, 209);
+}
+
+#submit-listing {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+   background-color: rgb(240, 240, 240);
+   border-radius: 15px;
+}
+
+#submit-listing a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: black;
+}
+
+#submit-listing a:hover {
+   background-color: rgb(145, 145, 145);
+   border-radius: 15px;
+}
 
 @media screen and (min-width: 850px) {
-
-  .listing-row{
+  .listing-row {
     display: flex;
-    flex-wrap: wrap ;
+    flex-wrap: wrap;
   }
 
-  .city-section{
-  margin-bottom: 60px;
-  width: 100%;
-}
+  .city-section {
+    margin-bottom: 60px;
+    width: 100%;
+  }
 
-.listing-card{
-  margin-bottom: 50px;
-  width: 95%;
-}
+  .listing-card {
+    margin-bottom: 50px;
+    width: 95%;
+  }
 
-.city-heading{
-  font-size: 30px;
-  margin: 20px 0px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 10px;
-  text-align: left;
-}
+  .city-heading {
+    font-size: 30px;
+    margin: 20px 0px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    text-align: left;
+  }
 
-  .city-heading{
+  .city-heading {
     color: rgb(0, 132, 209);
   }
-  #listings{
+  #listings {
     width: 70%;
     margin: auto;
   }
@@ -204,4 +219,24 @@ footer {
   #areas {
     width: 50%;
   }
+
+  #submit-listing {
+  width: 15%;
+  margin: auto;
+  text-align: center;
+   background-color: rgb(240, 240, 240);
+   border-radius: 15px;
+}
+
+#submit-listing a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: black;
+}
+
+#submit-listing a:hover {
+   background-color: lightgray;
+   border-radius: 15px;
+}
 }
