@@ -16,16 +16,29 @@ function displayListing(listing) {
   div.className = "listing";
 
   // Only show the first image initially
-  const firstImage = listing.uploadedFiles?.[0] || "";
+  const uploadFiles = listing.uploadedFiles;
+
+  const thumbnailsHTML = uploadFiles.slice(0, 10).map(url => `
+    <img 
+      src="${url}" 
+      class="thumbnail-img" 
+      style="width: 300px;  object-fit: cover; margin: 5px; cursor: pointer;" 
+    />
+  `).join("");
+
 
   div.innerHTML = `
 
   <h5>${listing.tag}</h5><br>
     <img 
       id="main-listing-image" 
-      src="${firstImage}" 
+      src="${uploadFiles[0]}" 
       alt="Main listing image"
     /><br>
+
+    <div id="thumbnails-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
+      ${thumbnailsHTML}
+    </div><br>
     <h5><span class="title">Address:</span>  ${listing.address}</h5><br>
     
 
@@ -68,8 +81,10 @@ function displayListing(listing) {
   listingDisplay.appendChild(div);
 
   // Add click event to open all images
-  const mainImage = document.getElementById("main-listing-image");
-  mainImage.addEventListener("click", () => showImageGallery(listing.uploadedFiles));
+  document.getElementById("main-listing-image").addEventListener("click", () => showImageGallery(uploadFiles));
+   document.querySelectorAll(".thumbnail-img").forEach(img =>
+    img.addEventListener("click", () => showImageGallery(uploadFiles))
+   );
 }
 
 function showImageGallery(images) {

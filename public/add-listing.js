@@ -4,26 +4,27 @@ const UPLOAD_PRESET = "upsatecountryrental"; // must be valid and unsigned in yo
 
 const listingForm = document.getElementById("listing-form");
 
+
 const spinner = document.getElementById("form-spinner");
 
 listingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  spinner.style.display = "inline-block";
+  spinner.style.display = "block";
+  spinner.style.margin = "auto"
 
   const formData = new FormData(listingForm);
-  const files = document.getElementById("files").files;
+  const defaultImageFile = document.getElementById("defaultImage").files[0];
+  const otherFiles = document.getElementById("files").files;
+  
 
   const imageUrls = [];
 
-  for (const file of files) {
-    console.log(
-      `Uploading ${file.name}, size: ${(file.size / 1024).toFixed(2)} KB`
-    );
+  if(defaultImageFile){
 
     try {
       const uploadData = new FormData();
-      uploadData.append("file", file);
+      uploadData.append("file", defaultImageFile);
       uploadData.append("upload_preset", UPLOAD_PRESET);
       uploadData.append("folder", "listings");
 
@@ -37,24 +38,55 @@ listingForm.addEventListener("submit", async (e) => {
       if (!res.ok || !data.secure_url) {
         console.error(`Upload failed for ${file.name}`, data);
         alert(`Failed to upload ${file.name}: ${JSON.stringify(data)}`);
-        continue; // skip this file
+       return; // skip this file
       }
 
-      console.log(`Uploaded ${file.name} to Cloudinary:`, data.secure_url);
+     
       imageUrls.push(data.secure_url);
     } catch (err) {
-      console.error(`Cloudinary upload failed for ${file.name}`, err);
-      alert(`Upload failed for ${file.name}`);
+      
+      alert(`Upload failed for cover image`);
       return;
     }
+  } else {
+    alert('Please upload a cover image');
+    return
   }
 
-  console.log("All uploaded URLs:", imageUrls);
 
-  if (imageUrls.length === 0) {
-    alert("No images were successfully uploaded. Cannot submit listing.");
+  for (const file of otherFiles){
+
+    try{
+      const uploadData = new FormData();
+      uploadData.append('file', file);
+      uploadData.append("upload_preset", UPLOAD_PRESET);
+      uploadData.append('folder', 'listings')
+
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body : uploadData,
+      })
+    
+
+    const data = await res.json();
+
+
+    if(!res.ok || !data.secure_url){
+      alert(`Failed to upload ${file.name} : ${JSON.stringify(data)}`)
+      continue;
+    }
+
+    imageUrls.push(data.secure_url);
+  } 
+  catch(err){
+    alert(`Upload failed for ${file.name}`)
     return;
   }
+}
+
+
+
+
 
   // Split address into parts
   const fullAddress = formData.get("address") || "";
