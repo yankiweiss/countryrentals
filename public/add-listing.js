@@ -28,6 +28,8 @@ listingForm.addEventListener("submit", async (e) => {
       uploadData.append("upload_preset", UPLOAD_PRESET);
       uploadData.append("folder", "listings");
 
+      
+
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: "POST",
         body: uploadData,
@@ -62,6 +64,8 @@ listingForm.addEventListener("submit", async (e) => {
       uploadData.append("upload_preset", UPLOAD_PRESET);
       uploadData.append('folder', 'listings')
 
+      
+
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: 'POST',
         body : uploadData,
@@ -77,6 +81,7 @@ listingForm.addEventListener("submit", async (e) => {
     }
 
     imageUrls.push(data.secure_url);
+    localStorage.setItem("listing", JSON.stringify(uploadData));
   } 
   catch(err){
     alert(`Upload failed for ${file.name}`)
@@ -108,10 +113,11 @@ listingForm.addEventListener("submit", async (e) => {
     tag: formData.get("tag"),
     availableFrom: formData.get("availableFrom"),
     availableUntil: formData.get("availableUntil"),
-
     description: formData.get("description"),
     uploadedFiles: imageUrls,
   };
+
+  localStorage.setItem("listing", JSON.stringify(backendData));
 
   console.log("Sending to backend:", backendData);
 
@@ -161,3 +167,5 @@ listingForm.addEventListener("submit", async (e) => {
     spinner.style.display = "none"; // Hide spinner
   }
 });
+
+
