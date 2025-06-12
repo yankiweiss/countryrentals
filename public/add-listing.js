@@ -123,7 +123,7 @@ listingForm.addEventListener("submit", async (e) => {
 
   try {
     const listingRes = await fetch(
-      "https://countryrentals.vercel.app/listing",
+      "https://www.upstatekosherrentals.com/listing",
       {
         method: "POST",
         headers: {
@@ -140,7 +140,7 @@ listingForm.addEventListener("submit", async (e) => {
     document.getElementById("files").value = "";
 
     // Notify admin
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -151,7 +151,7 @@ listingForm.addEventListener("submit", async (e) => {
     });
 
     // Notify user
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

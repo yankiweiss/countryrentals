@@ -109,7 +109,7 @@ document.getElementById("emailForm").addEventListener("submit", async (e) => {
   const message = document.getElementById("message").value;
 
   try {
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
