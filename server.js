@@ -1,11 +1,12 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
 const fileUpload = require("express-fileupload");
-const cors = require("cors");
+
 const cloudinary = require("cloudinary");
 
 app.use(express.json());
