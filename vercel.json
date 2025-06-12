@@ -1,10 +1,29 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": {
+        "x-redirect-check": "1"
+      },
+      "continue": true
+    }
+  ],
   "redirects": [
     {
       "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "countryrentals.vercel.app"
+        }
+      ],
       "destination": "https://upstatekosherrentals.com/$1",
       "permanent": true
     }
   ]
 }
+
