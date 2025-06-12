@@ -2,7 +2,7 @@ const listingSection = document.getElementById('listings');
 
 async function fetchListings() {
   try {
-    const res = await fetch("https://upstatekosherrentals.com/listing");
+    const res = await fetch("https://www.upstatekosherrentals.com/listing");
     const data = await res.json();
     console.log(data);
     displayHomeListings(data);
