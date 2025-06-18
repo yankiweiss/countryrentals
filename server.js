@@ -10,7 +10,7 @@ const fileUpload = require("express-fileupload");
 
 const cloudinary = require("cloudinary");
 
-const webhookRoute = require('./routes/stripeWebhooks');
+const webhookRoute = require('./routes/stripeWebhooks.js');
 app.use('/stripe', webhookRoute);
 
 app.use(express.json());

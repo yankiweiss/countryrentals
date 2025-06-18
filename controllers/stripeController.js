@@ -30,7 +30,7 @@ async function createCheckoutSession(req, res) {
             allow_promotion_codes: true,
             customer_email: customerEmail,
             metadata: {
-                listingId: req.body.listingId
+                listingId: listingId
             }
 
 

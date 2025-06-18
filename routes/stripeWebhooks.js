@@ -25,7 +25,7 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
     try {
       const updated = await Listing.findByIdAndUpdate(
         listingId,
-        { status: 'Approved' },
+        { status: 'approved' },
         { new: true }
       );
 
