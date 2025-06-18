@@ -2,7 +2,8 @@ const listingSection = document.getElementById('listings');
 
 async function fetchListings() {
   try {
-    const res = await fetch("https://countryrentals.vercel.app/listing");
+    const res = await fetch("https://www.upstatekosherrentals.com/listing");
+    
     const data = await res.json();
     console.log(data);
     displayHomeListings(data);
@@ -53,20 +54,20 @@ async function displayHomeListings(listings) {
       link.href = `listing.html?id=${listing._id}`;
       link.style.textDecoration = "none";
       link.style.color = "inherit";
-      link.style.width = "250px";
+      link.style.width = "300px";
 
       const card = document.createElement("div");
       card.className = "listing-card";
       card.style.border = "1px solid rgba(0, 45, 104, 0.1)";
-      card.style.borderRadius = "10px";
+      card.style.borderRadius = "15px";
       card.style.overflow = "hidden";
       card.style.boxShadow = "5px 10px 7px rgba(76, 154, 255, 0.1)";
       card.style.backgroundColor = "#fff";
 
       const img = new Image();
       img.src = listing.uploadedFiles?.[0] || "fallback.jpg";
-      img.width = 250;
-      img.height = 150;
+      img.width = 325;
+      img.height = 285;
       img.style.objectFit = "cover";
       img.style.display = "block";
 
@@ -81,10 +82,10 @@ async function displayHomeListings(listings) {
       const content = `
         <div style="padding: 10px;">
           <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
-          <p style="text-align: center; margin: 8px 0;">
-            <strong>Bedrooms:</strong> ${listing.bedrooms}
-            <strong style="margin-left: 10px;">Baths:</strong> ${listing.baths}
-          </p>
+          <div style="text-align: center; margin: 8px 0;">
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed"></i></strong> ${listing.bedrooms}</span>
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath"></i></strong> ${listing.baths}</span>
+          </div>
         </div>
       `;
 
@@ -109,7 +110,7 @@ document.getElementById("emailForm").addEventListener("submit", async (e) => {
   const message = document.getElementById("message").value;
 
   try {
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

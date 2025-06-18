@@ -1,7 +1,7 @@
 const tbody = document.getElementById("tbody");
 
 function getAllListings() {
-  fetch("https://countryrentals.vercel.app/listing", {
+  fetch("https://www.upstatekosherrentals.com/listing", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -79,7 +79,7 @@ function toggleImages(id) {
 
 async function updateStatus(listingId, newStatus) {
   try {
-    const res = await fetch(`https://countryrentals.vercel.app/listing/${listingId}`, {
+    const res = await fetch(`https://www.upstatekosherrentals.com/listing/${listingId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -97,7 +97,7 @@ async function updateStatus(listingId, newStatus) {
     const subject = "Your listing status has been updated";
     const message = `Your listing at "${data.address}" is now marked as "${newStatus}".`;
 
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

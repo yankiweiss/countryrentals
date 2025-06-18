@@ -2,33 +2,36 @@ const CLOUDINARY_UPLOAD_URL =
   "https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload";
 const UPLOAD_PRESET = "upsatecountryrental"; // must be valid and unsigned in your Cloudinary dashboard
 
+const overlay = document.getElementById("submission-overlay");
+
+const toastBody = document.getElementById("toast-body");
+
 const listingForm = document.getElementById("listing-form");
 
-
-const spinner = document.getElementById("form-spinner");
+const checkmark = document.getElementById("checkmark");
+const overlayText = document.getElementById("overlay-text");
 
 listingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  overlay.style.display = "flex";
   spinner.style.display = "block";
-  spinner.style.margin = "auto"
+  checkmark.style.display = "none";
+  overlayText.innerHTML =
+    "Submitting your data...<br />Please do not refresh or navigate away.";
 
   const formData = new FormData(listingForm);
   const defaultImageFile = document.getElementById("defaultImage").files[0];
   const otherFiles = document.getElementById("files").files;
-  
 
   const imageUrls = [];
 
-  if(defaultImageFile){
-
+  if (defaultImageFile) {
     try {
       const uploadData = new FormData();
       uploadData.append("file", defaultImageFile);
       uploadData.append("upload_preset", UPLOAD_PRESET);
       uploadData.append("folder", "listings");
-
-      
 
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: "POST",
@@ -40,58 +43,57 @@ listingForm.addEventListener("submit", async (e) => {
       if (!res.ok || !data.secure_url) {
         console.error(`Upload failed for ${file.name}`, data);
         alert(`Failed to upload ${file.name}: ${JSON.stringify(data)}`);
-       return; // skip this file
+        return; // skip this file
       }
 
-     
       imageUrls.push(data.secure_url);
     } catch (err) {
-      
-      alert(`Upload failed for cover image`);
+            document.getElementById("spinner").style.display = "none";
+            document.getElementById("checkmark").style.display = "none";
+           const toastEl = document.getElementById("error-icon");
+    const toast = new bootstrap.Toast(toastEl, { autohide: false });
+    toast.show();
+    toastBody.innerText = "Cover Image failed to upload!";
+    const overlay = document.getElementById("submission-overlay");
+    overlay.style.display = "none";
+
       return;
     }
   } else {
-    alert('Please upload a cover image');
-    return
-  }
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("checkmark").style.display = "none";
 
+    const toastEl = document.getElementById("error-icon");
+    const toast = new bootstrap.Toast(toastEl, { autohide: false });
+    toast.show();
+    toastBody.innerText = "Cover image is required";
+    const overlay = document.getElementById("submission-overlay");
+    overlay.style.display = "none";
 
-  for (const file of otherFiles){
-
-    try{
-      const uploadData = new FormData();
-      uploadData.append('file', file);
-      uploadData.append("upload_preset", UPLOAD_PRESET);
-      uploadData.append('folder', 'listings')
-
-      
-
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body : uploadData,
-      })
-    
-
-    const data = await res.json();
-
-
-    if(!res.ok || !data.secure_url){
-      alert(`Failed to upload ${file.name} : ${JSON.stringify(data)}`)
-      continue;
-    }
-
-    imageUrls.push(data.secure_url);
-    localStorage.setItem("listing", JSON.stringify(uploadData));
-  } 
-  catch(err){
-    alert(`Upload failed for ${file.name}`)
     return;
   }
-}
 
+  const uploadPromises = Array.from(otherFiles).map((file) => {
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append("upload_preset", UPLOAD_PRESET);
+    uploadData.append("folder", "listings");
 
+    return fetch(CLOUDINARY_UPLOAD_URL, {
+      method: "POST",
+      body: uploadData,
+    }).then((res) => res.json());
+  });
 
-
+  try {
+    const results = await Promise.all(uploadPromises);
+    results.forEach((data) => {
+      if (data.secure_url) imageUrls.push(data.secure_url);
+    });
+  } catch (err) {
+    alert("One or more image uploads failed.");
+    return;
+  }
 
   // Split address into parts
   const fullAddress = formData.get("address") || "";
@@ -117,13 +119,13 @@ listingForm.addEventListener("submit", async (e) => {
     uploadedFiles: imageUrls,
   };
 
-  localStorage.setItem("listing", JSON.stringify(backendData));
+ 
 
   console.log("Sending to backend:", backendData);
 
   try {
     const listingRes = await fetch(
-      "https://countryrentals.vercel.app/listing",
+      "https://www.upstatekosherrentals.com/listing",
       {
         method: "POST",
         headers: {
@@ -133,14 +135,13 @@ listingForm.addEventListener("submit", async (e) => {
       }
     );
 
-    const listingData = await listingRes.json();
-    console.log("Listing created:", listingData);
-    alert("Listing submitted successfully!");
+   
+
     listingForm.reset();
     document.getElementById("files").value = "";
 
     // Notify admin
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -151,7 +152,7 @@ listingForm.addEventListener("submit", async (e) => {
     });
 
     // Notify user
-    await fetch("https://countryrentals.vercel.app/email", {
+    await fetch("https://www.upstatekosherrentals.com/email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -163,9 +164,16 @@ listingForm.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error("Failed to submit listing or send emails:", err);
     alert("Error submitting listing. Please try again.");
-  }finally {
-    spinner.style.display = "none"; // Hide spinner
+  } finally {
+    setTimeout(() => {
+      spinner.style.display = "none";
+      checkmark.style.display = "block";
+      overlayText.textContent = "Submitted successfully!";
+
+      // Optional: hide overlay after a short delay
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 500);
+    }, 500);
   }
 });
-
-

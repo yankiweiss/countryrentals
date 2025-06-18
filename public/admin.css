@@ -1,4 +1,38 @@
-#all-listings{
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+#admin-page {
+  text-align: center;
+  color: #007bff;
+}
+
+table th, table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.table-responsive {
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.25rem;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+}
+
+/*#all-listings{
     display: flex;
 }
 
@@ -25,6 +59,6 @@ header{
 .table{
     width: 75%;
     margin: auto;
-}
+}*/
 
  

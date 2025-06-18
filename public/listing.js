@@ -3,7 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const listingId = urlParams.get("id");
 
 // Now fetch listing data using that ID
-fetch(`https://countryrentals.vercel.app/listing/${listingId}`)
+fetch(`https://www.upstatekosherrentals.com/listing/${listingId}`)
   .then(res => res.json())
   .then(data => {
     // Display the listing details on the page
