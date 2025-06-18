@@ -2,7 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function createCheckoutSession(req, res) {
 
-    const { coverImageUrl, customerEmail } = req.body || {};
+    const { coverImageUrl, customerEmail, listingId  } = req.body || {};
 
 
 
