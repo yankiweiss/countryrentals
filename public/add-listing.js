@@ -12,7 +12,7 @@ const checkmark = document.getElementById("checkmark");
 const overlayText = document.getElementById("overlay-text");
 
 listingForm.addEventListener("submit", async (e) => {
-e.preventDefault()
+  e.preventDefault()
   overlay.style.display = "flex";
   spinner.style.display = "block";
   checkmark.style.display = "none";
@@ -47,14 +47,14 @@ e.preventDefault()
 
       imageUrls.push(data.secure_url);
     } catch (err) {
-            document.getElementById("spinner").style.display = "none";
-            document.getElementById("checkmark").style.display = "none";
-           const toastEl = document.getElementById("error-icon");
-    const toast = new bootstrap.Toast(toastEl, { autohide: false });
-    toast.show();
-    toastBody.innerText = "Cover Image failed to upload!";
-    const overlay = document.getElementById("submission-overlay");
-    overlay.style.display = "none";
+      document.getElementById("spinner").style.display = "none";
+      document.getElementById("checkmark").style.display = "none";
+      const toastEl = document.getElementById("error-icon");
+      const toast = new bootstrap.Toast(toastEl, { autohide: false });
+      toast.show();
+      toastBody.innerText = "Cover Image failed to upload!";
+      const overlay = document.getElementById("submission-overlay");
+      overlay.style.display = "none";
 
       return;
     }
@@ -118,10 +118,6 @@ e.preventDefault()
     uploadedFiles: imageUrls,
   };
 
- 
-
-  console.log("Sending to backend:", backendData);
-
   try {
     const listingRes = await fetch(
       "https://www.upstatekosherrentals.com/listing",
@@ -132,9 +128,13 @@ e.preventDefault()
         },
         body: JSON.stringify(backendData),
       }
+
     );
 
-   
+    const listingData = await listingRes.json();
+    const listingId = listingData._id || listingData.id;
+
+
 
     listingForm.reset();
     document.getElementById("files").value = "";
@@ -142,29 +142,28 @@ e.preventDefault()
     try {
 
       const coverImageUrl = imageUrls[0] || null;
-     
 
-      
- const stripeRes = await fetch("/checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-    coverImageUrl,
-    customerEmail: formData.get("email")  
+      const stripeRes = await fetch("https://www.upstatekosherrentals.com/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          coverImageUrl,
+          customerEmail: formData.get("email"),
+          listingId
 
-  }), 
-  });
-  const stripeData = await stripeRes.json();
-  console.log(stripeData)
-  if (stripeData.url) {
-    window.location.href = stripeData.url; // ← Manual redirect to Stripe
-  } else {
-    throw new Error("No URL returned from Stripe");
-  }
-} catch (err) {
-  console.error("Stripe redirect failed:", err);
-  alert("Could not redirect to Stripe checkout.");
-}
+        }),
+      });
+      const stripeData = await stripeRes.json();
+      console.log(stripeData)
+      if (stripeData.url) {
+        window.location.href = stripeData.url; // ← Manual redirect to Stripe
+      } else {
+        throw new Error("No URL returned from Stripe");
+      }
+    } catch (err) {
+      console.error("Stripe redirect failed:", err);
+      alert("Could not redirect to Stripe checkout.");
+    }
 
     // Notify admin
     await fetch("https://www.upstatekosherrentals.com/email", {
@@ -203,5 +202,5 @@ e.preventDefault()
     }, 500);
   }
 
-  
+
 });

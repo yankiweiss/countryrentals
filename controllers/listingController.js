@@ -38,7 +38,7 @@ const createNewListing = async (req, res) => {
    
     });
 
-    res.status(201).json(newListing);
+    res.status(201).json({id: newListing._id});
   } catch (error) {
     console.error("Error creating listing:", error);
     res
@@ -93,6 +93,34 @@ const getListingById = async (req, res) => {
     console.error("Error fetching listing:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
+
+
+};
+
+
+const approveListingById = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Listing ID is required" });
+    }
+
+    const listing = await Listing.findByIdAndUpdate(
+      id,
+      { status: 'Approved' },
+      { new: true }
+    );
+
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    res.status(200).json({ message: "Listing approved", listing });
+  } catch (err) {
+    console.error("Error approving listing:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
 };
 
 module.exports = {
@@ -100,4 +128,5 @@ module.exports = {
   createNewListing,
   updateListingStatus,
   getListingById,
+  approveListingById
 };

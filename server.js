@@ -34,6 +34,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type']
 }));
 
+const webhookRoute = require('./routes/stripeWebhooks');
+app.use('/stripe', webhookRoute);
+
 
 app.use("/listing", require("./routes/api/listing.js"));
 app.use("/checkout", require("./routes/stripe.js"));
