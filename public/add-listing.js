@@ -116,7 +116,7 @@ e.preventDefault()
     availableUntil: formData.get("availableUntil"),
     description: formData.get("description"),
     uploadedFiles: imageUrls,
-    status : 'Pending',
+    
   };
 
  

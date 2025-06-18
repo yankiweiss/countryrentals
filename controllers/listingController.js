@@ -35,6 +35,7 @@ const createNewListing = async (req, res) => {
       phone: req.body.phone,
       tag: req.body.tag,
       uploadedFiles: req.body.uploadedFiles,
+      status: req.body.status
     });
 
     res.status(201).json(newListing);

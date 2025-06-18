@@ -48,13 +48,10 @@ const listingSchema = new Schema({
     default: "Pending",
   },availableFrom: {
     type: Date,
-    required: true,
+    required: false,
   },availableUntil: {
     type: Date,
-    required: true,
-  },Status:{
-    type: String,
-    required : true,
+    required: false,
   }
 });
 
