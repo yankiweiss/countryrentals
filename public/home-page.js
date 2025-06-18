@@ -5,8 +5,9 @@ async function fetchListings() {
     const res = await fetch("https://www.upstatekosherrentals.com/listing");
     
     const data = await res.json();
+    const approvedListings = data.filter(listing => listing.status === 'approved')
     console.log(data);
-    displayHomeListings(data);
+    displayHomeListings(approvedListings);
   } catch (error) {
     console.error("Error fetching listings:", error);
   }

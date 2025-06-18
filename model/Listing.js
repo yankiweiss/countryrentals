@@ -52,7 +52,10 @@ const listingSchema = new Schema({
   },availableUntil: {
     type: Date,
     required: true,
-  },
+  },Status:{
+    type: String,
+    required : true,
+  }
 });
 
 module.exports = mongoose.model("Listing", listingSchema);

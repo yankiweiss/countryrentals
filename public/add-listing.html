@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Listing - Page</title>
+  <title>Upstate Kosher Rentals | Add Listing</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" 
@@ -39,7 +39,7 @@
 
 
   <div id="container">
-    <form id="listing-form" enctype="multipart/form-data">
+    <form id="listing-form" enctype="multipart/form-data" action="/checkout" method="post">
       <div class="form-floating mb-2 row">
         <input type="text" class="form-control form-control-sm" id="nameInput" placeholder="Name" name="name" />
         <label for="nameInput">Name...</label>
@@ -135,21 +135,17 @@
 
 
 
-      <!--<div class="d-flex justify-content-center m-3">
+      <div class="d-flex justify-content-center m-3">
           <button
             type="submit"
             class="btn btn-success px-4 py-2 rounded-pill shadow-sm fw-semibold"
             id="submit"
           >
-            <i class="bi bi-credit-card me-2"></i> Proceed to Payment
+            <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
           </button>
-        </div>-->
+        </div>
 
-      <div class="d-flex justify-content-center m-3">
-        <button type="submit" class="btn btn-primary" id="submit">
-          Submit
-        </button>
-      </div>
+      
     </form>
   </div>
 

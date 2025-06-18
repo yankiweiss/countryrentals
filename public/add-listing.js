@@ -12,8 +12,7 @@ const checkmark = document.getElementById("checkmark");
 const overlayText = document.getElementById("overlay-text");
 
 listingForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
+e.preventDefault()
   overlay.style.display = "flex";
   spinner.style.display = "block";
   checkmark.style.display = "none";
@@ -117,6 +116,7 @@ listingForm.addEventListener("submit", async (e) => {
     availableUntil: formData.get("availableUntil"),
     description: formData.get("description"),
     uploadedFiles: imageUrls,
+    status : 'Pending',
   };
 
  
@@ -139,6 +139,33 @@ listingForm.addEventListener("submit", async (e) => {
 
     listingForm.reset();
     document.getElementById("files").value = "";
+
+    try {
+
+      const coverImageUrl = imageUrls[0] || null;
+     
+
+      
+ const stripeRes = await fetch("/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    coverImageUrl,
+    customerEmail: formData.get("email")  
+
+  }), 
+  });
+  const stripeData = await stripeRes.json();
+  console.log(stripeData)
+  if (stripeData.url) {
+    window.location.href = stripeData.url; // ← Manual redirect to Stripe
+  } else {
+    throw new Error("No URL returned from Stripe");
+  }
+} catch (err) {
+  console.error("Stripe redirect failed:", err);
+  alert("Could not redirect to Stripe checkout.");
+}
 
     // Notify admin
     await fetch("https://www.upstatekosherrentals.com/email", {
@@ -176,4 +203,6 @@ listingForm.addEventListener("submit", async (e) => {
       }, 500);
     }, 500);
   }
+
+  
 });

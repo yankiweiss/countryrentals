@@ -7,9 +7,13 @@ const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
 const fileUpload = require("express-fileupload");
 
+
 const cloudinary = require("cloudinary");
 
+
 app.use(express.json());
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -32,6 +36,7 @@ app.use(cors({
 
 
 app.use("/listing", require("./routes/api/listing.js"));
+app.use("/checkout", require("./routes/stripe.js"));
 
 const PORT = process.env.PORT || 3000;
 
