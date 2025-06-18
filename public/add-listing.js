@@ -154,7 +154,7 @@ listingForm.addEventListener("submit", async (e) => {
         }),
       });
       const stripeData = await stripeRes.json();
-      console.log(stripeData)
+      
       if (stripeData.url) {
         window.location.href = stripeData.url; // ← Manual redirect to Stripe
       } else {
