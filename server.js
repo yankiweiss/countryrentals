@@ -10,6 +10,8 @@ const fileUpload = require("express-fileupload");
 
 const cloudinary = require("cloudinary");
 
+const webhookRoute = require('./routes/stripeWebhooks');
+app.use('/stripe', webhookRoute);
 
 app.use(express.json());
 
@@ -34,8 +36,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type']
 }));
 
-const webhookRoute = require('./routes/stripeWebhooks');
-app.use('/stripe', webhookRoute);
+
 
 
 app.use("/listing", require("./routes/api/listing.js"));
