@@ -82,9 +82,9 @@ async function displayHomeListings(listings) {
       const content = `
         <div style="padding: 10px;">
           <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
-          <div style="text-align: center; margin: 8px 0;">
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-beat-fade fa-xl"></i></strong>  </span> <span style="margin: 5px;">${listing.bedrooms}</span>
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-beat-fade fa-xl"></i></strong> </span><span style="margin: 5px;">${listing.baths}</span>
+          <div style="text-align: center; margin: 8px 0; color: rgb(97, 97, 97);">
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-xl"></i></strong>  </span> <span style="margin: 5px;">${listing.bedrooms}</span>
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-xl"></i></strong> </span><span style="margin: 5px;">${listing.baths}</span>
           </div>
         </div>
       `;
