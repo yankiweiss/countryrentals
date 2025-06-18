@@ -1,11 +1,12 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
 const fileUpload = require("express-fileupload");
-const cors = require("cors");
+
 const cloudinary = require("cloudinary");
 
 app.use(express.json());
@@ -23,11 +24,11 @@ app.use(
 
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-app.use(
-  cors({
-    origin: "*", // or '*' for all, or use an array for multiple origins
-  })
-);
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 
 
 app.use("/listing", require("./routes/api/listing.js"));
