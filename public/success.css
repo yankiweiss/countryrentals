@@ -1,6 +1,6 @@
 #logo{
     margin: auto;
-    width: 20%;
+    max-width: 300px;
 }
 
 #confetti-canvas {
@@ -9,4 +9,10 @@
   left: 0;
   pointer-events: none;
   z-index: 9999;
+}
+
+#content{
+    width: 95%;
+    margin: auto;
+    background-color: aliceblue;
 }
