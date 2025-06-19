@@ -23,8 +23,9 @@ header {
   border-radius: 15px;
 }
 
-#logo img {
-  width: 100%;
+#logo{
+    margin: auto;
+    max-width: 300px;
 }
 
 .search-bar {
@@ -210,12 +211,7 @@ footer {
     width: 35%;
   }
 
-  #logo img {
-    width: 80%;
-    margin: auto;
-    display: block;
-    height: 550px;
-  }
+  
 
   #areas {
     width: 50%;
