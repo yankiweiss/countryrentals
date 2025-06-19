@@ -16,7 +16,6 @@ async function fetchListings() {
 async function displayHomeListings(listings) {
   const listingsByCity = {};
 
-  // Group listings by city
   for (const listing of listings) {
     const city = listing.city?.trim() || "Other";
     if (!listingsByCity[city]) {
@@ -25,31 +24,19 @@ async function displayHomeListings(listings) {
     listingsByCity[city].push(listing);
   }
 
-  // Clear previous listings
   listingSection.innerHTML = "";
 
-  // Build a section for each city
   for (const city in listingsByCity) {
-    // SECTION for the city
     const citySection = document.createElement("section");
     citySection.className = "city-section";
-    
 
-    // Heading
     const heading = document.createElement("h2");
     heading.textContent = `Popular Rentals in ${city}.`;
-    heading.className = 'city-heading'
+    heading.className = 'city-heading';
 
-    
-   
-    
-
-    // Listings Row
     const listingRow = document.createElement("div");
     listingRow.className = "listing-row";
-    
 
-    // Add each listing to this city's row
     for (const listing of listingsByCity[city]) {
       const link = document.createElement("a");
       link.href = `listing.html?id=${listing._id}`;
@@ -65,32 +52,36 @@ async function displayHomeListings(listings) {
       card.style.boxShadow = "5px 10px 7px rgba(76, 154, 255, 0.1)";
       card.style.backgroundColor = "#fff";
 
+      // Image wrapper
+      const imgWrapper = document.createElement("div");
+      imgWrapper.style.width = "100%";
+      imgWrapper.style.height = "285px";
+      imgWrapper.style.overflow = "hidden";
+      imgWrapper.style.backgroundColor = "#f2f2f2";
+
       const img = new Image();
       img.src = listing.uploadedFiles?.[0] || "fallback.jpg";
-      img.width = 325;
-      img.height = 285;
+      img.alt = listing.street || "Rental Image";
+      img.loading = "lazy";
+      img.style.width = "100%";
+      img.style.height = "100%";
       img.style.objectFit = "cover";
       img.style.display = "block";
 
-      await new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = () => {
-          console.warn("Image failed to load:", img.src);
-          resolve();
-        };
-      });
+      // No await needed
+      imgWrapper.appendChild(img);
+      card.appendChild(imgWrapper);
 
       const content = `
         <div style="padding: 10px;">
           <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
           <div style="text-align: center; margin: 8px 0; color: rgb(97, 97, 97);">
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-xl"></i></strong>  </span> <span style="margin: 5px;">${listing.bedrooms}</span>
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-xl"></i></strong> </span><span style="margin: 5px;">${listing.baths}</span>
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-xl"></i></strong></span> <span style="margin: 5px;">${listing.bedrooms}</span>
+            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-xl"></i></strong></span><span style="margin: 5px;">${listing.baths}</span>
           </div>
         </div>
       `;
 
-      card.appendChild(img);
       card.insertAdjacentHTML("beforeend", content);
       link.appendChild(card);
       listingRow.appendChild(link);
