@@ -25,7 +25,7 @@ async function createCheckoutSession(req, res) {
                 }
             ],
             mode: 'payment',
-            success_url: 'http://localhost:3000/success',
+            success_url: 'https://upstatekosherrentals.com/success',
             cancel_url: 'http://localhost:3000/cancel',
             allow_promotion_codes: true,
             customer_email: customerEmail,

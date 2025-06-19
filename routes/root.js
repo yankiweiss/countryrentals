@@ -11,6 +11,10 @@ router.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'admin.html'));
 });
 
+router.get("/success", (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'success.html'));
+});
+
 
 
 module.exports = router;
