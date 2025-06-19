@@ -1,5 +1,6 @@
-#logo img{
-  width: 100%;
+#logo{
+    margin: auto;
+    max-width: 300px;
 }
 
 header {
@@ -61,12 +62,7 @@ footer {
     color: rgb(0, 84, 163);
   }
  
-  #logo img {
-    width: 80%;
-    margin: auto;
-    display: block;
-    height: 550px;
-  }
+  
 
   .listing img{
 
