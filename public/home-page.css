@@ -38,7 +38,7 @@ header {
 }
 .listing-row {
   width: 80%;
-  margin: 25px auto;
+  margin: 10px auto;
 }
 
 .listing-row img {
@@ -142,18 +142,18 @@ footer {
   }
 
   .city-section {
-    margin-bottom: 60px;
+    margin: 0px;
     width: 100%;
   }
 
   .listing-card {
-    margin-bottom: 50px;
+    margin-bottom: 5px;
     width: 95%;
   }
 
   .city-heading {
     font-size: 30px;
-    margin: 20px 0px;
+    margin: 0px 0px;
     border-bottom: 1px solid #333;
     padding-bottom: 10px;
     text-align: left;
