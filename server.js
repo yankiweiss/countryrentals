@@ -42,6 +42,8 @@ app.use(cors({
 app.use("/listing", require("./routes/api/listing.js"));
 app.use("/checkout", require("./routes/stripe.js"));
 
+app.use("/search", require("./routes/api/search.js"));
+
 const PORT = process.env.PORT || 3000;
 
 const emailRouter = require("./routes/email");

@@ -51,22 +51,24 @@ async function displayHomeListings(listings) {
       card.style.overflow = "hidden";
       card.style.boxShadow = "5px 10px 7px rgba(76, 154, 255, 0.1)";
       card.style.backgroundColor = "#fff";
+      //card.style.minHeight = "400px";
 
       // Image wrapper
       const imgWrapper = document.createElement("div");
-      imgWrapper.style.width = "100%";
-      imgWrapper.style.height = "285px";
-      imgWrapper.style.overflow = "hidden";
-      imgWrapper.style.backgroundColor = "#f2f2f2";
+      imgWrapper.className = "imgWrapper";
+      //imgWrapper.style.width = "100%";
+      //imgWrapper.style.height = "285px";
+      //imgWrapper.style.overflow = "hidden";
+      //imgWrapper.style.backgroundColor = "#f2f2f2";
 
       const img = new Image();
       img.src = listing.uploadedFiles?.[0] || "fallback.jpg";
       img.alt = listing.street || "Rental Image";
-      img.loading = "lazy";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "cover";
-      img.style.display = "block";
+      //img.loading = "lazy";
+      //img.style.width = "100%";
+      //img.style.height = "100%";
+      //img.style.objectFit = "cover";
+      //img.style.display = "block";
 
       // No await needed
       imgWrapper.appendChild(img);
@@ -97,24 +99,48 @@ fetchListings();
 
 // Email in the bottom going to upstatekosherlisting
 
-document.getElementById("emailForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const message = document.getElementById("message").value;
+//document.getElementById("emailForm").addEventListener("submit", async (e) => {
+//  e.preventDefault();
+//  const message = document.getElementById("message").value;
+//
+//  try {
+//    await fetch("https://www.upstatekosherrentals.com/email", {
+//      method: "POST",
+//      headers: { "Content-Type": "application/json" },
+//      body: JSON.stringify({
+//        to: "upstatekosherrentals@gmail.com",
+//        subject: "Suggestion from Site",
+//        message,
+//      }),
+//    });
+//    alert("Thanks for Emailing us!");
+//    document.getElementById("message").value = "";
+//  } catch (err) {
+//    alert("Failed to send email");
+//    console.error(err);
+//  }
+//});
 
-  try {
-    await fetch("https://www.upstatekosherrentals.com/email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "upstatekosherrentals@gmail.com",
-        subject: "Suggestion from Site",
-        message,
-      }),
-    });
-    alert("Thanks for Emailing us!");
-    document.getElementById("message").value = "";
-  } catch (err) {
-    alert("Failed to send email");
-    console.error(err);
-  }
-});
+
+//async function populateCities() {
+//
+//  const res = await fetch('http://localhost:3000/search');
+//  const data = await res.json();
+//  
+//  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
+//  const cities = data.filter(city => !excludedCities.includes(city));
+//
+//  console.log(cities)
+//
+//  const select = document.getElementById('area-select')
+//
+//  cities.forEach(city => {
+//    const option = document.createElement('option');
+//    option.value = city;
+//    option.textContent = city;
+//    select.appendChild(option)
+//  })
+//  
+//}
+//
+//populateCities();
