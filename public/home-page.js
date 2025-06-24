@@ -127,25 +127,25 @@ fetchListings();
 //});
 
 
-async function populateCities() {
-
-  const res = await fetch('http://localhost:3000/search');
-  const data = await res.json();
-  
-  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
-  const cities = data.filter(city => !excludedCities.includes(city));
-
-  
-
-  const select = document.getElementById('area-select')
-
-  cities.forEach(city => {
-    const option = document.createElement('option');
-    option.value = city;
-    option.textContent = city;
-    select.appendChild(option)
-  })
-  
-}
-
-populateCities();
+//async function populateCities() {
+//
+//  const res = await fetch('http://localhost:3000/search');
+//  const data = await res.json();
+//  
+//  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
+//  const cities = data.filter(city => !excludedCities.includes(city));
+//
+//  
+//
+//  const select = document.getElementById('area-select')
+//
+//  cities.forEach(city => {
+//    const option = document.createElement('option');
+//    option.value = city;
+//    option.textContent = city;
+//    select.appendChild(option)
+//  })
+//  
+//}
+//
+//populateCities();
