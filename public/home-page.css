@@ -17,10 +17,25 @@ body {
 .list-button{
   display: none;
 }
-.contact-info a{
-  display: none;
+.contact-info a {
+  display: block;
+  color: navy;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 18px;
+   border-right: 2px solid navy;
+  border-bottom: 2px solid navy;
+  border-radius: 15px;
+  width: 150px;
+  margin: auto;
 }
 
+.contact-info a:hover {
+  border-right: 2px solid #007BFF;
+  border-bottom: 2px solid #007BFF;
+  border-radius: 15px;
+  color: #007BFF;
+}
 
 
 .city-section {
@@ -270,6 +285,28 @@ footer{
   color: #007BFF;
 }
 
+#container{
+display: flex;
+
+}
+
+.search-bar{
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  padding: 35px;
+   border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#area-select{
+  font-style: italic;
+  font-weight: bold;
+  color: #888;
+  font-size: 18px;
+}
+
   .listing-row {
     display: flex;
     flex-wrap: wrap;
@@ -310,7 +347,7 @@ footer{
     margin: auto;
     width: 10%;
   }
-  .search-bar {
+  /*.search-bar {
     display: flex;
     gap: 10px;
     padding: 10px;
@@ -320,7 +357,7 @@ footer{
     align-items: center;
     max-width: 905px;
     margin: 15px auto;
-  }
+  }*/
 
   .search-bar input,
   .search-bar select {

@@ -1,17 +1,22 @@
 const listingSection = document.getElementById('listings');
 
+let allListings = []; 
+
 async function fetchListings() {
   try {
     const res = await fetch("https://www.upstatekosherrentals.com/listing");
-    
     const data = await res.json();
     const approvedListings = data.filter(listing => listing.status === 'approved')
-    console.log(data);
+
+    allListings = approvedListings;
+   
     displayHomeListings(approvedListings);
   } catch (error) {
     console.error("Error fetching listings:", error);
   }
 }
+
+
 
 async function displayHomeListings(listings) {
   const listingsByCity = {};
@@ -122,25 +127,25 @@ fetchListings();
 //});
 
 
-//async function populateCities() {
-//
-//  const res = await fetch('http://localhost:3000/search');
-//  const data = await res.json();
-//  
-//  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
-//  const cities = data.filter(city => !excludedCities.includes(city));
-//
-//  console.log(cities)
-//
-//  const select = document.getElementById('area-select')
-//
-//  cities.forEach(city => {
-//    const option = document.createElement('option');
-//    option.value = city;
-//    option.textContent = city;
-//    select.appendChild(option)
-//  })
-//  
-//}
-//
-//populateCities();
+async function populateCities() {
+
+  const res = await fetch('http://localhost:3000/search');
+  const data = await res.json();
+  
+  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
+  const cities = data.filter(city => !excludedCities.includes(city));
+
+  
+
+  const select = document.getElementById('area-select')
+
+  cities.forEach(city => {
+    const option = document.createElement('option');
+    option.value = city;
+    option.textContent = city;
+    select.appendChild(option)
+  })
+  
+}
+
+populateCities();
