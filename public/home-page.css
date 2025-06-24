@@ -192,9 +192,13 @@ footer{
 
 #email-phone{
 
-  text-align: center;
+  text-align: start;
   padding: 45px 0px;
  
+}
+
+#email-phone > div:first-child{
+  text-align: center;
 }
 
 #email-phone a {
