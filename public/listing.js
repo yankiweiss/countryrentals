@@ -64,13 +64,13 @@ function displayListing(listing) {
 
     <br>
 
-    <h5>Owners Details:</h5>
-
-    <h5><span class="title">Email:</span>  ${listing.email}</h5>
-    <br>
-
-    <h5><span class="title">Phone:</span>  ${listing.phone}</h5><br>
-
+    <div class="card text-center mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Contact the Owner</h5>
+    <p><strong>Email:</strong> ${listing.email}</p>
+    <p><strong>Phone:</strong> ${listing.phone}</p>
+  </div>
+</div>
     <hr style="width: 500px; margin: auto;">
 
     <br>
