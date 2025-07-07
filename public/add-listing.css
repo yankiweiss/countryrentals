@@ -13,3 +13,17 @@
   margin-top: 50px;
 }*/
 
+.top-banner {
+  background-color: #007bff; /* Bootstrap blue */
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 1.2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.top-banner p {
+  margin: 0;
+}
+

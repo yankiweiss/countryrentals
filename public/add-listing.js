@@ -148,6 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const datesSection = document.getElementById("dates-available");
   const progressBar = document.getElementById("progressBar");
   const addressInput = document.getElementById("search_input");
+  const descriptionSection = document.getElementById("descriptionSection");
+  
 
   propertyOptions.forEach(option => {
     option.addEventListener("click", () => {
@@ -222,9 +224,90 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.getElementById("availableUntil").addEventListener("change", (e) => {
     localStorage.setItem("availableUntil", e.target.value);
+
+
+     if (descriptionSection) {
+      descriptionSection.classList.remove("listing-hidden");
+    }
+
+     progressBar.style.width = "100%";
+    progressBar.textContent = "100%";
+
+    const textarea = descriptionSection.querySelector("textarea");
+    if (textarea) textarea.focus();
   });
 
+  
+  });
+
+
+
+  document.getElementById("listingDescription").addEventListener("blur", async () => {
+  const description = document.getElementById("listingDescription").value.trim();
+
+  if (!description) {
+    alert("Please enter a description before continuing.");
+    return;
+  }
+
+  // Retrieve values from localStorage
+  const propertyType = localStorage.getItem("selectedPropertyType");
+  const address = localStorage.getItem("address");
+  const bedrooms = localStorage.getItem("bedrooms");
+  const email = localStorage.getItem("loggedInEmail");
+  const baths = localStorage.getItem("baths");
+  const availableFrom = localStorage.getItem("availableFrom");
+  const availableUntil = localStorage.getItem("availableUntil");
+
+  // Construct the data object
+  const listingData = {
+    propertyType,
+    address,
+    bedrooms,
+    baths,
+    availableFrom,
+    availableUntil,
+    description,
+    email
+  };
+
+  // Validate all fields exist
+  if (!propertyType || !address || !bedrooms || !baths || !availableFrom || !availableUntil) {
+    alert("Some listing details are missing. Please go back and complete the form.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/listing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(listingData)
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert("Listing submitted successfully!");
+      console.log("Server response:", result);
+
+      // Optionally clear localStorage:
+      localStorage.clear();
+
+      // Redirect or proceed
+      window.location.href = "/listing-success";
+    } else {
+      const error = await response.json();
+      console.error("Submission error:", error);
+      alert("Submission failed: " + (error.message || "Try again."));
+    }
+  } catch (err) {
+    console.error("Fetch error:", err);
+    alert("An error occurred while submitting your listing.");
+  }
 });
+
+
 //const CLOUDINARY_UPLOAD_URL =
 //  "https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload";
 //const UPLOAD_PRESET = "upsatecountryrental"; // must be valid and unsigned in your Cloudinary dashboard

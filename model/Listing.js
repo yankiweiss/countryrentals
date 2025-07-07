@@ -32,7 +32,7 @@ const listingSchema = new Schema({
   },
   phone: {
     type: Number,
-    required: true,
+    required: false,
   },
   tag: {
     type: String,
@@ -40,7 +40,7 @@ const listingSchema = new Schema({
   },
   uploadedFiles: {
     type: [String],
-    required: true,
+    required: false,
   },
   status: {
     type: String,
@@ -52,6 +52,9 @@ const listingSchema = new Schema({
   },availableUntil: {
     type: Date,
     required: false,
+  },propertyType: {
+    type: String,
+    required: true
   }
 });
 
