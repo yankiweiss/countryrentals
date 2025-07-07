@@ -56,13 +56,15 @@ const listingSchema = new Schema({
     required: false,
   },
   propertyType: { type: String, required: true },
-  takenDates: [
-    {
-      from: Date,
-      to: Date,
-    }
-  ],
-  default: [],  
+  takenDates: {
+    type: [
+      {
+        from: Date,
+        to: Date,
+      }
+    ],
+    default: [],
+  }, 
   
 });
 
