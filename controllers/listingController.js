@@ -147,27 +147,40 @@ const approveListingById = async (req, res) => {
 
 
 const editListingById = async (req, res) => {
-  const {id }= req.params;
-
-  const {name, address} = req.body;
+  const { id } = req.params;
+  const {
+    name,
+    address,
+    baths,
+    bedrooms,
+    description,
+    email,
+    takenDates, // <== include this
+  } = req.body;
 
   try {
-
     const updatedListing = await Listing.findByIdAndUpdate(
-      id, 
-      {name, address},
-      {new : true}
+      id,
+      {
+        name,
+        address,
+        baths,
+        bedrooms,
+        description,
+        email,
+        takenDates, // <== include this
+      },
+      { new: true }
     );
 
     if (!updatedListing) return res.status(404).json({ message: "Listing not found" });
 
     res.json(updatedListing);
-    
-  } catch (err) {
-    console.error("Update error:", err);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Failed to update listing" });
   }
-}
+};
 
 
 const deleteListingById = async (req, res) => {
@@ -196,7 +209,7 @@ const resetTakenDatesForListings = async (req, res) => {
     const newTakenDates = req.body.takenDates || [];
 
     const result = await Listing.updateMany(
-      filter,
+      {},
       { $set: { takenDates: newTakenDates } }
     );
 
