@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p class="card-text">${listing.address || "No address provided"}</p>
 
       <button class="btn btn-outline-primary btn-sm edit-btn mt-2" data-id="${listing._id}">Edit</button>
+      <button class="btn btn-outline-danger btn-sm delete-btn mt-2" data-id="${listing._id}">Delete</button>
     </div>
   </div>
 `;
@@ -83,6 +84,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
   }
+
+  const deleteBtn = col.querySelector(".delete-btn");
+deleteBtn.addEventListener("click", async (e) => {
+  e.stopPropagation();
+  const confirmed = confirm("Are you sure you want to delete this listing?");
+  if (!confirmed) return;
+
+  const listingId = deleteBtn.getAttribute("data-id");
+
+  try {
+    const res = await fetch(`https://upstatekosherrentals.com/listing/${listingId}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("Failed to delete listing");
+
+    alert("Listing deleted.");
+    location.reload(); // or remove card from DOM instead of reloading
+  } catch (err) {
+    console.error(err);
+    alert("Error deleting listing.");
+  }
+});
 
   async function submitEdit(listingId) {
     const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
