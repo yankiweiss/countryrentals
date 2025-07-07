@@ -54,9 +54,12 @@ function displayListing(listing) {
       </span>
     </h5><br>
     
-    <h5><span class="title">Available From:</span>  ${formatDateToMMDDYY(listing.availableFrom)}</h5>
-    
-    <h5><span class="title">Available Until:</span>  ${formatDateToMMDDYY(listing.availableUntil)}</h5>
+   <h5><span class="title">Available From:</span>  ${formatDateToMMDDYY(listing.availableFrom)}</h5>
+
+<h5><span class="title">Available Until:</span>  ${formatDateToMMDDYY(listing.availableUntil)}</h5>
+
+<h5 class="text-center mt-4">Check Availability</h5>
+<div id="availability-calendar" class="mb-4" style="max-width: 320px; margin: auto; border: 1px solid #ddd; padding: 15px; border-radius: 10px; background: #f9f9f9;"></div>
 
     <br>
 
@@ -79,6 +82,21 @@ function displayListing(listing) {
 
 
   listingDisplay.appendChild(div);
+
+
+  const availableFrom = new Date(listing.availableFrom);
+const availableUntil = new Date(listing.availableUntil);
+const takenDates = (listing.takenDates || []).map(d => new Date(d));
+
+flatpickr("#availability-calendar", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  inline: true,
+  minDate: availableFrom,
+  maxDate: availableUntil,
+  disable: takenDates,
+  clickOpens: false // makes it view-only
+});
 
   // Add click event to open all images
   document.getElementById("main-listing-image").addEventListener("click", () => showImageGallery(uploadFiles));

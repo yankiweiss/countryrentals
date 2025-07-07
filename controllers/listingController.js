@@ -155,8 +155,19 @@ const editListingById = async (req, res) => {
     bedrooms,
     description,
     email,
-    takenDates, // <== include this
+    takenDates,
   } = req.body;
+
+  //// Optionally sanitize takenDates to array of objects with from/to or just dates
+  //let sanitizedTakenDates = [];
+  //if (Array.isArray(takenDates)) {
+  //  sanitizedTakenDates = takenDates.map(date => {
+  //    // Example if date is string or {from, to}
+  //    if (typeof date === 'string') return new Date(date);
+  //    if (date.from && date.to) return { from: new Date(date.from), to: new Date(date.to) };
+  //    return date; // fallback
+  //  });
+  //}
 
   try {
     const updatedListing = await Listing.findByIdAndUpdate(
@@ -168,7 +179,7 @@ const editListingById = async (req, res) => {
         bedrooms,
         description,
         email,
-        takenDates, // <== include this
+        takenDates: sanitizedTakenDates,
       },
       { new: true }
     );
@@ -181,7 +192,6 @@ const editListingById = async (req, res) => {
     res.status(500).json({ message: "Failed to update listing" });
   }
 };
-
 
 const deleteListingById = async (req, res) => {
   const { id } = req.params;
