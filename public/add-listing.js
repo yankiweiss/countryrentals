@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const addListingBtn = document.getElementById("add-listing");
   const listingForm = document.getElementById("list-form");
-  const listingsSection = document.getElementById("listings-section"); // Updated to your wrapper
+  const listingsSection = document.getElementById("listings-section");
+  const listingsContainer = document.getElementById("listings-container");
+
+  if (!addListingBtn || !listingForm || !listingsSection || !listingsContainer) return;
 
   addListingBtn.addEventListener("click", () => {
     const isFormHidden = listingForm.classList.contains("listing-hidden");
@@ -17,10 +20,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Fetch and display listings
-  const listingsContainer = document.getElementById("listings-container");
-
-  const email = localStorage.getItem("loggedInEmail");
+  const email = localStorage.getItem("loggedInEmail") || "";
+  if (!email) {
+    listingsContainer.innerHTML = `<p class="text-center text-danger">No user email found.</p>`;
+    return;
+  }
 
   try {
     const res = await fetch(`/listing/email?email=${encodeURIComponent(email)}`);
@@ -35,24 +39,45 @@ document.addEventListener("DOMContentLoaded", async () => {
       const col = document.createElement("div");
       col.className = "col-md-4 mb-4";
 
-     col.innerHTML = `
-  <div class="card listing-card text-center position-relative">
-    <img src="${(listing.uploadedFiles && listing.uploadedFiles.length > 0) ? listing.uploadedFiles[0] : 'https://via.placeholder.com/400x200?text=No+Image'}" class="card-img-top listing-img" alt="Listing Image" />
-    <div class="card-body">
-      <h5 class="card-title listing-title">${listing.name || "Untitled Listing"}</h5>
-      <p class="card-text">${listing.address || "No address provided"}</p>
+      col.innerHTML = `
+      <div class="card listing-card text-center position-relative">
+        <img src="${(listing.uploadedFiles && listing.uploadedFiles.length > 0) ? listing.uploadedFiles[0] : 'https://via.placeholder.com/400x200?text=No+Image'}" class="card-img-top listing-img" alt="Listing Image" />
+        <div class="card-body">
+          <h5 class="card-title listing-title">${listing.name || "Untitled Listing"}</h5>
+          <p class="card-text">${listing.address || "No address provided"}</p>
 
-      <button class="btn btn-outline-primary btn-sm edit-btn mt-2" data-id="${listing._id}">Edit</button>
-      <button class="btn btn-outline-danger btn-sm delete-btn mt-2" data-id="${listing._id}">Delete</button>
-    </div>
-  </div>
-`;
+          <button class="btn btn-outline-primary btn-sm edit-btn mt-2 me-2" data-id="${listing._id}">Edit</button>
+          <button class="btn btn-outline-danger btn-sm delete-btn mt-2" data-id="${listing._id}">Delete</button>
+        </div>
+      </div>
+      `;
 
- const editBtn = col.querySelector(".edit-btn");
-  editBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    openInlineEditForm(listing._id);
-  });
+      const editBtn = col.querySelector(".edit-btn");
+      editBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openInlineEditForm(listing._id);
+      });
+
+      const deleteBtn = col.querySelector(".delete-btn");
+      deleteBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const confirmed = confirm("Are you sure you want to delete this listing?");
+        if (!confirmed) return;
+
+        try {
+          const res = await fetch(`https://upstatekosherrentals.com/listing/${listing._id}`, {
+            method: "DELETE",
+          });
+
+          if (!res.ok) throw new Error("Failed to delete listing");
+
+          alert("Listing deleted.");
+          col.remove();
+        } catch (err) {
+          console.error(err);
+          alert("Error deleting listing.");
+        }
+      });
 
       listingsContainer.appendChild(col);
     });
@@ -60,7 +85,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingsContainer.innerHTML = `<p class="text-danger">Failed to load listings.</p>`;
     console.error(err);
   }
+
+  // Your property option & form step logic here...
+
+  // (You can just copy your existing second DOMContentLoaded logic here)
 });
+
 
 
   function openInlineEditForm(listingId) {
@@ -85,28 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  const deleteBtn = col.querySelector(".delete-btn");
-deleteBtn.addEventListener("click", async (e) => {
-  e.stopPropagation();
-  const confirmed = confirm("Are you sure you want to delete this listing?");
-  if (!confirmed) return;
-
-  const listingId = deleteBtn.getAttribute("data-id");
-
-  try {
-    const res = await fetch(`https://upstatekosherrentals.com/listing/${listingId}`, {
-      method: "DELETE",
-    });
-
-    if (!res.ok) throw new Error("Failed to delete listing");
-
-    alert("Listing deleted.");
-    location.reload(); // or remove card from DOM instead of reloading
-  } catch (err) {
-    console.error(err);
-    alert("Error deleting listing.");
-  }
-});
+  
 
   async function submitEdit(listingId) {
     const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
@@ -129,6 +138,7 @@ deleteBtn.addEventListener("click", async (e) => {
     }
   }
 
+  
 
 document.addEventListener("DOMContentLoaded", () => {
   const propertyOptions = document.querySelectorAll(".property-option");

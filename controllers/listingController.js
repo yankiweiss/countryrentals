@@ -167,6 +167,24 @@ const editListingById = async (req, res) => {
   }
 }
 
+
+const deleteListingById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedListing = await Listing.findByIdAndDelete(id);
+
+    if (!deletedListing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    res.status(200).json({ message: "Listing deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting listing:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getAllListing,
   createNewListing,
@@ -174,5 +192,6 @@ module.exports = {
   getListingById,
   approveListingById,
   getListingByEmail,
-  editListingById
+  editListingById,
+  deleteListingById
 };
