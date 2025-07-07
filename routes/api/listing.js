@@ -10,7 +10,7 @@ router.route('/')
 router.get("/email", listingController.getListingByEmail);
 router.get("/:id", listingController.getListingById);
 router.post("/", listingController.createNewListing);
-router.patch("/:id", listingController.updateListingStatus);
+router.patch("/:id", listingController.editListingById);
  // ✅ This line enables updates
 
 module.exports = router;

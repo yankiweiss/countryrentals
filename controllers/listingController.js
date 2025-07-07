@@ -173,5 +173,6 @@ module.exports = {
   updateListingStatus,
   getListingById,
   approveListingById,
-  getListingByEmail
+  getListingByEmail,
+  editListingById
 };
