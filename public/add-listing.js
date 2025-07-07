@@ -258,6 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const baths = localStorage.getItem("baths");
   const availableFrom = localStorage.getItem("availableFrom");
   const availableUntil = localStorage.getItem("availableUntil");
+  const name = "Jacob Weiss"
 
   // Construct the data object
   const listingData = {
@@ -268,7 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
     availableFrom,
     availableUntil,
     description,
-    email
+    email,
+    name
   };
 
   // Validate all fields exist

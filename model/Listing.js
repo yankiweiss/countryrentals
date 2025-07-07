@@ -46,16 +46,19 @@ const listingSchema = new Schema({
     type: String,
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
-  },availableFrom: {
+  },
+  availableFrom: {
     type: Date,
     required: false,
-  },availableUntil: {
+  },
+  availableUntil: {
     type: Date,
     required: false,
-  },propertyType: {
+  },
+  propertyType: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Listing", listingSchema);
