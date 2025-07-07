@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   try {
-    const response = await fetch("/listing", {
+    const response = await fetch("https://upstatekosherrentals.com/listing", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
