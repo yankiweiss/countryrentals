@@ -35,7 +35,8 @@ const createNewListing = async (req, res) => {
       phone: req.body.phone,
       tag: req.body.tag,
       uploadedFiles: req.body.uploadedFiles,
-      propertyType: req.body.propertyType
+      propertyType: req.body.propertyType,
+      takenDates: req.body.takenDates || [], 
    
     });
 

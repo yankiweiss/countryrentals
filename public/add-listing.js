@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch(`/listing/email?email=${encodeURIComponent(email)}`);
     const listings = await res.json();
+    window.currentListings = listings;
 
     if (!listings.length) {
       listingsContainer.innerHTML = `<p class="text-center">You have no listings yet.</p>`;
@@ -94,49 +95,116 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   function openInlineEditForm(listingId) {
-    const card = document.querySelector(`button[data-id="${listingId}"]`).closest(".card");
-    const title = card.querySelector(".listing-title").textContent.trim();
-    const address = card.querySelector(".card-text").textContent.trim();
+  const card = document.querySelector(`button[data-id="${listingId}"]`).closest(".card");
+  const title = card.querySelector(".listing-title").textContent.trim();
+  const address = card.querySelector(".card-text").textContent.trim();
 
-    card.innerHTML = `
-      <div class="card-body">
-        <h5>Edit Listing</h5>
-        <div class="mb-2">
-          <label class="form-label">Title</label>
-          <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" />
-        </div>
-        <div class="mb-2">
-          <label class="form-label">Address</label>
-          <input type="text" class="form-control" id="edit-address-${listingId}" value="${address}" />
-        </div>
-        <button class="btn btn-success btn-sm" onclick="submitEdit('${listingId}')">Save</button>
-        <button class="btn btn-secondary btn-sm ms-2" onclick="location.reload()">Cancel</button>
+  const listing = window.currentListings.find(l => l._id === listingId); // You must save all listings to window.currentListings
+
+  const takenDates = listing.takenDates || [];
+
+  card.innerHTML = `
+  <div class="card-body">
+    <h5 class="mb-4">Edit Listing</h5>
+
+     <div class="row mb-3">
+
+    <div class="col">
+      <label for="edit-title-${listingId}" class="form-label">Name</label>
+      <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" placeholder="Listing Name" />
+    </div>
+
+     <div class="col">
+      <label for="edit-email-${listingId}" class="form-label">Email</label>
+      <input type="email" class="form-control" id="edit-email-${listingId}" value="${listing.email || ''}" placeholder="Contact email" />
+    </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col">
+        <label for="edit-baths-${listingId}" class="form-label">Baths</label>
+        <input type="number" min="0" class="form-control" id="edit-baths-${listingId}" value="${listing.baths || ''}" placeholder="Number of baths" />
       </div>
-    `;
-  }
+      <div class="col">
+        <label for="edit-bedrooms-${listingId}" class="form-label">Bedrooms</label>
+        <input type="number" min="0" class="form-control" id="edit-bedrooms-${listingId}" value="${listing.bedrooms || ''}" placeholder="Number of bedrooms" />
+      </div>
+    </div>
 
-  
+    <div class="mb-3">
+      <label for="edit-description-${listingId}" class="form-label">Description</label>
+      <textarea class="form-control" id="edit-description-${listingId}" rows="3" placeholder="Enter description">${listing.description || ''}</textarea>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="edit-address-${listingId}" class="form-label">Address</label>
+      <input type="text" class="form-control" id="edit-address-${listingId}" value="${address}" placeholder="Listing address" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Taken Dates</label>
+      <div id="edit-datePicker-${listingId}" class="mb-2"></div>
+      <input type="hidden" id="taken-dates-${listingId}" />
+    </div>
+
+    <button class="btn btn-success btn-sm" onclick="submitEdit('${listingId}')">Save</button>
+    <button class="btn btn-secondary btn-sm ms-2" onclick="location.reload()">Cancel</button>
+  </div>
+`;
+
+  // Initialize Flatpickr inside the edit card
+  const fp = flatpickr(`#edit-datePicker-${listingId}`, {
+    mode: "multiple",
+    inline: true,
+    dateFormat: "Y-m-d",
+    defaultDate: takenDates,
+    onChange: (selectedDates) => {
+      const formatted = selectedDates.map(d => d.toISOString().split("T")[0]);
+      document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(formatted);
+    }
+  });
+
+  // Preload hidden input with original dates
+  document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(takenDates);
+}
 
   async function submitEdit(listingId) {
-    const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
-    const newAddress = document.getElementById(`edit-address-${listingId}`).value.trim();
+  const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
+  const newBaths = document.getElementById(`edit-baths-${listingId}`).value.trim();
+  const newBedrooms = document.getElementById(`edit-bedrooms-${listingId}`).value.trim();
+  const newDescription = document.getElementById(`edit-description-${listingId}`).value.trim();
+  const newEmail = document.getElementById(`edit-email-${listingId}`).value.trim();
+  const newAddress = document.getElementById(`edit-address-${listingId}`).value.trim();
+  const takenDates = JSON.parse(document.getElementById(`taken-dates-${listingId}`).value || "[]");
 
-    try {
-      const res = await fetch(`https://upstatekosherrentals.com/listing/${listingId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newTitle, address: newAddress }),
-      });
 
-      if (!res.ok) throw new Error("Failed to update");
+   const updatedData = {
+    name: newTitle,
+    baths: newBaths,
+    bedrooms: newBedrooms,
+    description: newDescription,
+    email: newEmail,
+    address: newAddress,
+    takenDates,
+  };
 
-      alert("Listing updated!");
-      location.reload(); // refresh to reflect changes
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Try again.");
-    }
+  try {
+    const res = await fetch(`https://upstatekosherrentals.com/listing/${listingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!res.ok) throw new Error("Failed to update");
+
+    alert("Listing updated!");
+    location.reload(); // refresh to reflect changes
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong. Try again.");
   }
+}
 
   
 

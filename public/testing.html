@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+</head>
+<body>
+
+   <h3>Select Dates to Mark as Taken</h3>
+
+<div id="datePicker"></div> <!-- this will become the calendar -->
+
+<button id="markTakenBtn">Mark Selected as Taken</button>
+
+<h4>Marked Dates:</h4>
+<ul id="takenDatesList"></ul>
+
+
+<script>
+  let takenDates = [];
+
+  // Load saved taken dates
+  const saved = localStorage.getItem("takenDates");
+  if (saved) {
+    takenDates = JSON.parse(saved);
+  }
+
+  // Initialize Flatpickr in inline mode (calendar is always visible)
+  const fp = flatpickr("#datePicker", {
+    mode: "multiple",
+    inline: true,
+    dateFormat: "Y-m-d",
+    disable: takenDates.map(d => new Date(d)),
+  });
+
+  // On DOM ready, show taken dates
+  document.addEventListener("DOMContentLoaded", () => {
+    updateTakenDatesList();
+  });
+
+  // Mark selected dates as taken
+  document.getElementById("markTakenBtn").addEventListener("click", () => {
+    const selected = fp.selectedDates.map(d => d.toISOString().split("T")[0]);
+
+    takenDates = [...new Set([...takenDates, ...selected])];
+
+    fp.set("disable", takenDates.map(d => new Date(d)));
+    fp.clear();
+
+    localStorage.setItem("takenDates", JSON.stringify(takenDates));
+    updateTakenDatesList();
+  });
+
+  // Display taken dates in the list
+  function updateTakenDatesList() {
+    const list = document.getElementById("takenDatesList");
+    list.innerHTML = "";
+    takenDates.forEach(date => {
+      const li = document.createElement("li");
+      li.textContent = date;
+      list.appendChild(li);
+    });
+  }
+</script>
+    
+</body>
+</html>

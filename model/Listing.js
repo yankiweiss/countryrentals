@@ -56,6 +56,9 @@ const listingSchema = new Schema({
     required: false,
   },
   propertyType: { type: String, required: true },
+  takenDates: [String],
+  default: [],  
+  
 });
 
 module.exports = mongoose.model("Listing", listingSchema);
