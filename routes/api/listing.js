@@ -12,6 +12,7 @@ router.get("/:id", listingController.getListingById);
 router.post("/", listingController.createNewListing);
 router.patch("/:id", listingController.editListingById);
 router.delete('/:id', listingController.deleteListingById);
+router.post('/reset-takendates',listingController.resetTakenDatesForListings);
  // ✅ This line enables updates
 
 module.exports = router;

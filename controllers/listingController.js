@@ -187,6 +187,30 @@ const deleteListingById = async (req, res) => {
   }
 };
 
+
+const resetTakenDatesForListings = async (req, res) => {
+  try {
+   
+    
+    // The new takenDates array you want to set (empty array here)
+    const newTakenDates = req.body.takenDates || [];
+
+    const result = await Listing.updateMany(
+      filter,
+      { $set: { takenDates: newTakenDates } }
+    );
+
+    res.status(200).json({
+      message: `Updated takenDates for ${result.modifiedCount} listings`,
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (error) {
+    console.error("Error updating takenDates for listings:", error);
+    res.status(500).json({ message: "Error updating takenDates", error: error.message });
+  }
+};
+
+
 module.exports = {
   getAllListing,
   createNewListing,
@@ -195,5 +219,6 @@ module.exports = {
   approveListingById,
   getListingByEmail,
   editListingById,
-  deleteListingById
+  deleteListingById,
+  resetTakenDatesForListings
 };
