@@ -6,12 +6,15 @@ const path = require("path");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn.js");
 const fileUpload = require("express-fileupload");
+const cookieParser = require('cookie-parser')
 
 
 const cloudinary = require("cloudinary");
 
 const webhookRoute = require('./routes/stripeWebhooks.js');
 app.use('/stripe', webhookRoute);
+
+app.use(cookieParser())
 
 app.use(express.json());
 
@@ -27,18 +30,22 @@ app.use(
   })
 );
 
-
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
-
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // ✅ include PATCH here
+  credentials: true // optional, if you use cookies/auth
 }));
 
 
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 
+
+
+
+app.use('/register', require('./routes/register.js'))
+app.use('/refresh', require('./routes/refresh.js'))
+app.use('/auth', require('./routes/auth.js'))
 app.use("/listing", require("./routes/api/listing.js"));
 app.use("/checkout", require("./routes/stripe.js"));
 

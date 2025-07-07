@@ -1,151 +1,15 @@
-#logo{
-    margin: auto;
-    max-width: 300px;
-}
-
-#submit {
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
-
-  #submit:hover {
-    background-color: #60ad73; 
-    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.2); 
-}
-
-html {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-
-form {
-  width: 75%;
-  margin: auto;
-}
-
-.listing-callout {
-  text-align: center;
-  margin-bottom: 50px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  background-color: #f0f8ff;
-  padding: 20px 30px;
-  border-radius: 12px;
-  border: 1px solid #cce5ff;
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.1);
-}
-
-header {
-  background-color: rgb(249, 249, 249);
-  width: 98%;
-  padding: 0px 0px 0px 0px;
-  margin: 0px auto 25px;
-  border-radius: 15px;
-}
-
-#emailInput,
-#nameInput,
-#phoneInput,
-#address,
-#description {
-  border-radius: 12px;
-}
-
-footer {
-  height: 250px;
-  background-color: rgb(243, 243, 243);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 98%;
-  margin: auto;
-  border-radius: 15px;
-}
-
-#container-big {
+#list-form{
   display: none;
 }
 
-#submission-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(5px);
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-#submission-overlay .popup {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  max-width: 300px;
+/*#choose-type-house{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+}
+#house{
+  width: 250px;
 }
 
-@media screen and (min-width: 850px) {
-  #container {
-    width: 40%;
-    margin: auto;
-  }
+#progress-bar{
+  margin-top: 50px;
+}*/
 
-  form {
-    width: 55%;
-    margin: auto;
-  }
-  #post-listing a {
-    display: block;
-    margin: auto;
-    width: 10%;
-  }
-  .search-bar {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 999px;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    align-items: center;
-    max-width: 905px;
-    margin: 15px auto;
-  }
-
-  .search-bar input,
-  .search-bar select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 999px;
-    outline: none;
-    font-size: 14px;
-  }
-
-  .search-bar button {
-    background-color: rgba(51, 51, 253, 0.753);
-    color: white;
-    border: none;
-    border-radius: 999px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-
-  #emailForm {
-    width: 35%;
-  }
-
- 
-
-  #areas {
-    width: 50%;
-  }
-}

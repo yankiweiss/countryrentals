@@ -78,6 +78,26 @@ const updateListingStatus = async (req, res) => {
   }
 };
 
+
+const getListingByEmail = async (req, res) => {
+  
+    const { email } = req.query;
+
+    if (!email) {
+    return res.status(400).json({ error: "Email query parameter is required" });
+  }
+
+    try {
+    const listings = await Listing.find({ email });
+    res.json(listings);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+
+ 
+}
+
+
 const getListingById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -123,10 +143,35 @@ const approveListingById = async (req, res) => {
   }
 };
 
+
+const editListingById = async (req, res) => {
+  const id = req.params;
+
+  const {name, address} = req.body;
+
+  try {
+
+    const updateListing = await Listing.findByIdAndUpdate(
+      id, 
+      {name, address},
+      {new : true}
+    );
+
+    if (!updatedListing) return res.status(404).json({ message: "Listing not found" });
+
+    res.json(updatedListing);
+    
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ message: "Failed to update listing" });
+  }
+}
+
 module.exports = {
   getAllListing,
   createNewListing,
   updateListingStatus,
   getListingById,
-  approveListingById
+  approveListingById,
+  getListingByEmail
 };

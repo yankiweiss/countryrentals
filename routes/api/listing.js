@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const listingController = require("../../controllers/listingController");
+const verifyJWT = require('../../middleware/verifyJWT')
 
-router.get("/", listingController.getAllListing);
+router.route('/')
+
+
+.get(listingController.getAllListing);
+router.get("/email", listingController.getListingByEmail);
 router.get("/:id", listingController.getListingById);
 router.post("/", listingController.createNewListing);
-router.put("/:id", listingController.updateListingStatus);
+router.patch("/:id", listingController.updateListingStatus);
  // ✅ This line enables updates
 
 module.exports = router;

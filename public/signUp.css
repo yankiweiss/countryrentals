@@ -1,0 +1,107 @@
+
+footer{
+  padding: 10px;
+  background-color: rgb(243, 243, 243);
+  width: 99%;
+  margin: 15px auto;
+  border-radius: 15px;
+  margin-top: 25px;
+
+}
+
+#contact-section{
+  display: flex;
+
+  flex-direction: column-reverse
+}
+#description{
+  display: flex;
+  flex-direction: column;
+}
+
+
+#email-phone{
+
+  text-align: start;
+  padding: 45px 0px;
+ 
+}
+
+#email-phone > div:first-child{
+  text-align: center;
+}
+
+#email-phone a {
+  color: gray;
+  text-decoration: none;
+}
+.color-black{
+  color: black;
+}
+/* form section for small screens */
+
+.form-section {
+     max-width: 65%;
+      background: #fff;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+      
+    }
+
+
+
+
+
+
+
+
+@media screen and (min-width: 850px) {
+footer {
+  width: 100%; /* Instead of 100% */
+  margin-top: 4%;
+  border-radius: 15px; /* Optional: make it flush edge-to-edge */
+  padding: 10px 10px;
+  background-color: rgb(243, 243, 243);
+}
+
+html{
+    margin: 0;
+}
+
+#contact-section{
+  display: flex;
+  flex-direction: row;
+}
+#description{
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.vertical-line {
+  width: 2px;            
+  height: 80%;           
+  background-color: #cfcfcf; 
+  margin: 40px;
+}
+#email-phone{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 45%;
+  padding: 100px;
+ 
+}
+
+#email-phone a {
+  color: gray;
+  text-decoration: none;
+}
+.color-black{
+  color: black;
+}
+}
+
+

@@ -15,6 +15,13 @@ router.get("/success", (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'success.html'));
 });
 
+router.get("/signIn", (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'signIn.html'));
+});
+
+router.get("/signUp", (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'signUp.html'));
+});
 
 
 module.exports = router;

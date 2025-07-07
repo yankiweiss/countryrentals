@@ -1,10 +1,11 @@
+
 const listingSection = document.getElementById('listings');
 
 let allListings = []; 
 
 async function fetchListings() {
   try {
-    const res = await fetch("https://www.upstatekosherrentals.com/listing");
+    const res = await fetch("/listing");
     const data = await res.json();
     const approvedListings = data.filter(listing => listing.status === 'approved')
 
