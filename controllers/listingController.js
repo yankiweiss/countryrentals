@@ -145,13 +145,13 @@ const approveListingById = async (req, res) => {
 
 
 const editListingById = async (req, res) => {
-  const id = req.params;
+  const {id }= req.params;
 
   const {name, address} = req.body;
 
   try {
 
-    const updateListing = await Listing.findByIdAndUpdate(
+    const updatedListing = await Listing.findByIdAndUpdate(
       id, 
       {name, address},
       {new : true}

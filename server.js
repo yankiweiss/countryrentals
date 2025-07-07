@@ -30,11 +30,13 @@ app.use(
   })
 );
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // ✅ include PATCH here
-  credentials: true // optional, if you use cookies/auth
-}));
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://upstatekosherrentals.com"],
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions)); 
 
 
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
