@@ -55,10 +55,7 @@ const listingSchema = new Schema({
     type: Date,
     required: false,
   },
-  propertyType: {
-    type: String,
-    required: true,
-  },
+  propertyType: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Listing", listingSchema);

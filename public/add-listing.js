@@ -273,6 +273,8 @@ document.addEventListener("DOMContentLoaded", () => {
     name
   };
 
+  console.log(listingData)
+
   // Validate all fields exist
   if (!propertyType || !address || !bedrooms || !baths || !availableFrom || !availableUntil) {
     alert("Some listing details are missing. Please go back and complete the form.");
@@ -300,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "/listing-success";
     } else {
       const error = await response.json();
+      console.log(propertyType)
       console.error("Submission error:", error);
       alert("Submission failed: " + (error.message || "Try again."));
     }
