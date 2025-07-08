@@ -349,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    availableFrom
+   
     const propertyType = localStorage.getItem("selectedPropertyType");
     const address = localStorage.getItem("address");
     const bedrooms = localStorage.getItem("bedrooms");

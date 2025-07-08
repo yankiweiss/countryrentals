@@ -146,7 +146,7 @@
       .then((res) => res.json())
       .then((listing) => {
         displayListing(listing);
-        initializeCalendar(listing);
+        
       });
 
     function displayListing(listing) {
@@ -208,34 +208,59 @@
       document
         .getElementById("main-listing-image")
         .addEventListener("click", () => showImageGallery(uploadFiles));
+        initializeCalendar(listing);
     }
 
-    function initializeCalendar(listing) {
-      const availableFrom = new Date(listing.availableFrom);
-      const availableUntil = new Date(listing.availableUntil);
+  function initializeCalendar(listing) {
+  const availableFrom = new Date(listing.availableFrom);
+  const availableUntil = new Date(listing.availableUntil);
 
-      // takenDates array of ISO strings
-      const takenDates = (listing.takenDates || [])
-        .map(d => new Date(d))
-        .filter(d => d >= availableFrom && d <= availableUntil);
+  function normalizeDateToMidnight(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
 
-      flatpickr("#availability-calendar", {
+  const disableRanges = (listing.takenDates || []).map(range => ({
+    from: normalizeDateToMidnight(range.from),
+    to: normalizeDateToMidnight(range.to),
+  }));
+
+  function addDisabledTooltips(selectedDates, dateStr, instance) {
+  // Add title and cursor for hover tooltip on disabled days
+  const disabledDays = instance.calendarContainer.querySelectorAll(".flatpickr-disabled");
+  disabledDays.forEach(day => {
+    day.setAttribute("title", "Not Available");
+    day.style.cursor = "not-allowed";
+  });
+}
+
+// Show alert or tooltip on click of disabled day (optional)
+function addClickListenerForDisabled(instance) {
+  const disabledDays = instance.calendarContainer.querySelectorAll(".flatpickr-disabled");
+  disabledDays.forEach(day => {
+    day.onclick = (e) => {
+      e.preventDefault();
+      alert("This date is not available");
+    };
+  });
+}
+
+  flatpickr("#availability-calendar", {
   mode: "range",
   dateFormat: "Y-m-d",
   inline: true,
   minDate: availableFrom,
   maxDate: availableUntil,
-  disable: takenDates,
+  disable: disableRanges,
   clickOpens: false,
-  onReady: function(selectedDates, dateStr, instance) {
-    // Hide any input inside the container once Flatpickr is ready
-    const inputs = instance.calendarContainer.querySelectorAll("input, .flatpickr-input");
-    inputs.forEach(input => {
-      input.style.display = "none";
-    });
-  }
-})
-    }
+  onReady: addDisabledTooltips,
+  onMonthChange: addDisabledTooltips,
+  onYearChange: addDisabledTooltips,
+  onOpen: addDisabledTooltips,
+});
+}
+    
 
     function showImageGallery(images) {
       const overlay = document.createElement("div");
