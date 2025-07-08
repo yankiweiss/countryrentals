@@ -53,13 +53,15 @@ function displayListing(listing) {
         <strong><i>Baths:</i></strong> ${listing.baths}
       </span>
     </h5><br>
+
+    <div class="card mb-3" style="max-width: 320px; margin: 20px auto; padding: 15px; border-radius: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+  <h6 class="text-center mb-3">Availability</h6>
+  <div id="availability-calendar"></div>
+</div>
     
-   <h5><span class="title">Available From:</span>  ${formatDateToMMDDYY(listing.availableFrom)}</h5>
+ 
 
-<h5><span class="title">Available Until:</span>  ${formatDateToMMDDYY(listing.availableUntil)}</h5>
 
-<h5 class="text-center mt-4">Check Availability</h5>
-<div id="availability-calendar" class="mb-4" style="max-width: 320px; margin: auto; border: 1px solid #ddd; padding: 15px; border-radius: 10px; background: #f9f9f9;"></div>
 
     <br>
 
@@ -95,7 +97,8 @@ flatpickr("#availability-calendar", {
   minDate: availableFrom,
   maxDate: availableUntil,
   disable: takenDates,
-  clickOpens: false // makes it view-only
+  defaultDate: [availableFrom, availableUntil],  // <-- this shows the initial selected range
+  clickOpens: false  // makes it view-only, user can't change selection
 });
 
   // Add click event to open all images

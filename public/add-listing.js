@@ -95,13 +95,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Editing a exiting Listing
 
-  function openInlineEditForm(listingId) {
+ function openInlineEditForm(listingId) {
   const card = document.querySelector(`button[data-id="${listingId}"]`).closest(".card");
   const title = card.querySelector(".listing-title").textContent.trim();
   const address = card.querySelector(".card-text").textContent.trim();
   const listing = window.currentListings.find(l => l._id === listingId);
 
-  const takenRanges = listing.takenDates || []; // This should be array of {from, to}
+  let existingRanges = listing.takenDates || []; // from DB
+  let newTakenDates = []; // added now
 
   card.innerHTML = `
     <div class="card-body">
@@ -110,11 +111,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="row mb-3">
         <div class="col">
           <label for="edit-title-${listingId}" class="form-label">Name</label>
-          <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" placeholder="Listing Name" />
+          <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" />
         </div>
         <div class="col">
           <label for="edit-email-${listingId}" class="form-label">Email</label>
-          <input type="email" class="form-control" id="edit-email-${listingId}" value="${listing.email || ''}" placeholder="Contact email" />
+          <input type="email" class="form-control" id="edit-email-${listingId}" value="${listing.email || ''}" />
         </div>
       </div>
 
@@ -140,10 +141,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Add Taken Date Range</label>
-        <input id="flatpickr-range-${listingId}" class="form-control mb-2" placeholder="Select date range" />
-        <button class="btn btn-primary btn-sm mb-2" id="add-range-btn-${listingId}">Add Range</button>
-        <div id="taken-dates-list-${listingId}" class="mb-2"></div>
+        <label class="form-label">Select Taken Date Ranges</label>
+        <div class="d-flex justify-content-center">
+          <div id="inline-datepicker-${listingId}" class="mb-2"></div>
+        </div>
+        <div id="range-preview-${listingId}" class="mb-2"></div>
         <input type="hidden" id="taken-dates-${listingId}" />
       </div>
 
@@ -152,55 +154,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
 
-  let takenDates = [...takenRanges]; // Store in memory
-
-  // Initialize Flatpickr
-  let selectedRange = [];
-  const fp = flatpickr(`#flatpickr-range-${listingId}`, {
+  const fp = flatpickr(`#inline-datepicker-${listingId}`, {
     mode: "range",
+    inline: true,
     dateFormat: "Y-m-d",
-    onChange: (selectedDates) => {
-      selectedRange = selectedDates;
-    }
-  });
-
-  // Add range button
-  document.getElementById(`add-range-btn-${listingId}`).addEventListener("click", () => {
-    if (selectedRange.length === 2) {
-      const from = selectedRange[0].toISOString().split("T")[0];
-      const to = selectedRange[1].toISOString().split("T")[0];
-      takenDates.push({ from, to });
-      selectedRange = [];
-      fp.clear();
-      updateTakenDates();
-    } else {
-      alert("Please select a date range.");
+    disable: existingRanges.map(r => ({ from: r.from, to: r.to })),
+    onClose: function (selectedDates) {
+      if (selectedDates.length === 2) {
+        const from = selectedDates[0].toISOString().split("T")[0];
+        const to = selectedDates[1].toISOString().split("T")[0];
+        newTakenDates.push({ from, to });
+        fp.clear();
+        updateTakenDates();
+      }
     }
   });
 
   function updateTakenDates() {
-    // update hidden input
-    document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(takenDates);
+    const allRanges = [...existingRanges, ...newTakenDates];
+    document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(allRanges);
 
-    // render list
-    const container = document.getElementById(`taken-dates-list-${listingId}`);
+    const container = document.getElementById(`range-preview-${listingId}`);
     container.innerHTML = "";
-    takenDates.forEach((range, i) => {
+
+    allRanges.forEach((range, index) => {
+      const isNew = index >= existingRanges.length;
       const div = document.createElement("div");
-      div.innerHTML = `From: ${range.from} To: ${range.to} <button class="btn btn-sm btn-danger ms-2" onclick="removeRange(${i}, '${listingId}')">Remove</button>`;
+      div.className = "d-flex justify-content-between align-items-center mb-1";
+      div.innerHTML = `
+        <span>From: ${range.from} → To: ${range.to}</span>
+        <button class="btn btn-sm btn-outline-danger" onclick="removeRange_${listingId}(${index})">Remove</button>
+      `;
       container.appendChild(div);
     });
   }
 
-  window.removeRange = function(index, listingId) {
-    takenDates.splice(index, 1);
+  // Attach range removal handler for this listing only
+  window[`removeRange_${listingId}`] = function(index) {
+    if (index < existingRanges.length) {
+      // Remove from existing
+      existingRanges.splice(index, 1);
+    } else {
+      // Adjust index to remove from newTakenDates
+      newTakenDates.splice(index - existingRanges.length, 1);
+    }
+
+    // Rebuild disable list in calendar
+    fp.set("disable", existingRanges.map(r => ({ from: r.from, to: r.to })));
+
     updateTakenDates();
   };
 
-  // Initial load
   updateTakenDates();
 }
-
 
 async function submitEdit(listingId) {
   const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
@@ -343,9 +349,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    availableFrom
     const propertyType = localStorage.getItem("selectedPropertyType");
     const address = localStorage.getItem("address");
     const bedrooms = localStorage.getItem("bedrooms");
+    const availableUntil = localStorage.getItem("availableUntil");
+    const availableFrom = localStorage.getItem("availableFrom");
     const email = localStorage.getItem("loggedInEmail") || "no-reply@example.com";
     const baths = localStorage.getItem("baths");
     const name = "Jacob Weiss"; // Optional: make dynamic later
@@ -361,6 +370,8 @@ document.addEventListener("DOMContentLoaded", () => {
       description,
       email,
       name,
+      availableUntil,
+      availableFrom,
       takenDates
     };
 
