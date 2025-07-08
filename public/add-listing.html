@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link rel="stylesheet" href="add-listing.css" />
+
 
   <style>
 
@@ -189,7 +191,10 @@
 
 
     <div id="list-form" class="listing-hidden">
-      <h3 class="text-center text-primary mb-4">
+
+      <div id="property-options">
+      
+      <h3 class="text-center text-primary m-5">
         Select the Type of Property You Want to List
       </h3>
 
@@ -218,8 +223,48 @@
           </div>
         </div>
       </div>
+      </div>
+      
 
+    
+
+
+
+<!-- Image Uploads  -->
+ <div  class="listing-hidden" id="upload-image-section">
+    <div class="mb-4">
+  <label class="form-label">Upload 4 Images (first will be the cover)</label>
+  <div id="image-boxes" class="d-flex flex-wrap gap-3">
+    <!-- Cover Image slot -->
+    <div class="image-slot" data-index="0">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty cover-label">
+        <div>
+          <div class="cover-text">Cover Image</div>
+          <div class="plus-sign">+</div>
+        </div>
+      </div>
     </div>
+
+    <!-- Other 3 image slots -->
+    <div class="image-slot" data-index="1">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+    <div class="image-slot" data-index="2">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+    <div class="image-slot" data-index="3">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+  </div>
+  <div id="image-error" class="text-danger mt-2" style="display: none;">All 4 images are required.</div>
+</div>
+</div>
+
+
 
 
      <div id="address" class="listing-hidden">
@@ -326,7 +371,7 @@
         </div>
       </div>
     </div>
-  </div>
+  
 
   <!-- JS to Toggle Form -->
 

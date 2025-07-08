@@ -1,10 +1,14 @@
+const CLOUDINARY_UPLOAD_URL =
+ "https://api.cloudinary.com/v1_1/dhwtnj8eb/image/upload";
+const UPLOAD_PRESET = "upsatecountryrental";
+
 document.addEventListener("DOMContentLoaded", async () => {
   const addListingBtn = document.getElementById("add-listing");
   const listingForm = document.getElementById("list-form");
   const listingsSection = document.getElementById("listings-section");
   const listingsContainer = document.getElementById("listings-container");
 
-  if (!addListingBtn || !listingForm || !listingsSection || !listingsContainer) return;
+  
 
   addListingBtn.addEventListener("click", () => {
     const isFormHidden = listingForm.classList.contains("listing-hidden");
@@ -248,6 +252,7 @@ async function submitEdit(listingId) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const propertyOptions = document.querySelectorAll(".property-option");
+  const imagesSection = document.getElementById("upload-image-section")
   const listForm = document.getElementById("list-form");
   const addressSection = document.getElementById("address");
   const bedAndBathsSection = document.getElementById("bedAndBaths");
@@ -258,6 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const listingDescription = document.getElementById("listingDescription");
   const bedroomSelect = document.getElementById("bedroomSelect");
   const bathSelect = document.getElementById("bathSelect");
+   const allPropertyOptions = document.getElementById("property-options");
+
+
+  
+  
 
   
 
@@ -266,9 +276,10 @@ document.addEventListener("DOMContentLoaded", () => {
     option.addEventListener("click", () => {
       const type = option.getAttribute("data-type");
       localStorage.setItem("selectedPropertyType", type);
-      listForm.classList.add("listing-hidden");
-      addressSection.classList.remove("listing-hidden");
+      imagesSection.classList.remove("listing-hidden");
+    allPropertyOptions.classList.add("listing-hidden")
       bedAndBathsSection.classList.add("listing-hidden");
+      addressSection.classList.add("listing-hidden");
 
       progressBar.style.width = "50%";
       progressBar.textContent = "50%";
@@ -360,6 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = "Jacob Weiss"; // Optional: make dynamic later
     let takenDates = [];
     
+    const imageUrls = JSON.parse(localStorage.getItem("uploadedImageUrls") || "[]");
 
     const listingData = {
       propertyType,
@@ -372,7 +384,8 @@ document.addEventListener("DOMContentLoaded", () => {
       name,
       availableUntil,
       availableFrom,
-      takenDates
+      takenDates,
+      uploadedFiles: imageUrls,
     };
 
     // === Validate required fields ===
@@ -408,6 +421,139 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+ document.addEventListener("DOMContentLoaded", () => {
+    const slots = document.querySelectorAll(".image-slot");
+    const errorDiv = document.getElementById("image-error");
+    const imageData = [null, null, null, null];
+
+    slots.forEach((slot, index) => {
+      const input = slot.querySelector("input[type='file']");
+      const preview = slot.querySelector(".image-preview");
+
+      preview.addEventListener("click", () => input.click());
+
+      input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (!file || !file.type.startsWith("image/")) return;
+
+        imageData[index] = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.innerHTML = `<img src="${e.target.result}" /><button class="remove-btn" title="Remove">×</button>`;
+          preview.classList.remove("empty");
+
+          const removeBtn = preview.querySelector(".remove-btn");
+          removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            imageData[index] = null;
+            input.value = "";
+            if (index === 0) {
+              preview.innerHTML = `
+                <div>
+                  <div class="cover-text">Cover Image</div>
+                  <div class="plus-sign">+</div>
+                </div>
+              `;
+            } else {
+              preview.innerHTML = "+";
+            }
+            preview.classList.add("empty");
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // Example validation function
+    function validateImages() {
+      const allFilled = imageData.every(img => img !== null);
+      if (!allFilled) {
+        errorDiv.style.display = "block";
+        return false;
+      } else {
+        errorDiv.style.display = "none";
+        return true;
+      }
+    }
+
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        if (!validateImages()) {
+          e.preventDefault();
+        }
+      });
+    }
+  });
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const imageSlots = document.querySelectorAll("#image-boxes .image-slot input[type='file']");
+    const imageSection = document.getElementById("upload-image-section");
+    const addressSection = document.getElementById("address");
+
+    function checkIfAllImagesUploaded() {
+      const allUploaded = Array.from(imageSlots).every(input => input.files.length > 0);
+      if (allUploaded) {
+        uploadImagesToCloudinary();
+        // Hide image section, show address section
+        imageSection.classList.add("listing-hidden");
+        addressSection.classList.remove("listing-hidden");
+
+        // Optional: scroll to address section
+        addressSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    imageSlots.forEach(input => {
+      input.addEventListener("change", checkIfAllImagesUploaded);
+    });
+  });
+
+
+  async function uploadImagesToCloudinary() {
+  const imageInputs = document.querySelectorAll(".image-slot input[type='file']");
+  const imageFiles = Array.from(imageInputs).map(input => input.files[0]);
+
+  const imageUrls = [];
+
+  for (const file of imageFiles) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", "listings");
+
+    try {
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.secure_url) {
+        alert(`Failed to upload: ${file.name}`);
+        return;
+      }
+
+      imageUrls.push(data.secure_url);
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("An error occurred during image upload.");
+      return;
+    }
+  }
+
+  // Save URLs in localStorage or a variable
+  localStorage.setItem("uploadedImageUrls", JSON.stringify(imageUrls));
+
+  // Proceed to next step
+  document.getElementById("upload-image-section").classList.add("listing-hidden");
+  document.getElementById("address").classList.remove("listing-hidden");
+  document.getElementById("address").scrollIntoView({ behavior: "smooth" });
+}
 
 
 //const CLOUDINARY_UPLOAD_URL =

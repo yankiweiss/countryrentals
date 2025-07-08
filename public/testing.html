@@ -6,66 +6,162 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    .image-slot {
+    width: 120px;
+    height: 140px;
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+  }
 
+  .image-slot .label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: 0.9rem;
+    color: #333;
+    width: 100%;
+    text-align: center;
+  }
+
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #aaa;
+    position: relative;
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+    padding: 0;
+    cursor: pointer;
+  }
+</style>
 
 </head>
 <body>
+<div class="mb-4">
+  <label class="form-label">Upload 4 Images (first will be the cover)</label>
+  <div id="image-boxes" class="d-flex flex-wrap gap-3">
+    <!-- Cover Image slot -->
+    <div class="image-slot" data-index="0">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty cover-label">
+        <div>
+          <div class="cover-text">Cover Image</div>
+          <div class="plus-sign">+</div>
+        </div>
+      </div>
+    </div>
 
-   <h3>Select Dates to Mark as Taken</h3>
-
-<div id="datePicker"></div> <!-- this will become the calendar -->
-
-<button id="markTakenBtn">Mark Selected as Taken</button>
-
-<h4>Marked Dates:</h4>
-<ul id="takenDatesList"></ul>
-
+    <!-- Other 3 image slots -->
+    <div class="image-slot" data-index="1">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+    <div class="image-slot" data-index="2">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+    <div class="image-slot" data-index="3">
+      <input type="file" accept="image/*" hidden />
+      <div class="image-preview empty">+</div>
+    </div>
+  </div>
+  <div id="image-error" class="text-danger mt-2" style="display: none;">All 4 images are required.</div>
+</div>
 
 <script>
-  let takenDates = [];
+ document.addEventListener("DOMContentLoaded", () => {
+    const slots = document.querySelectorAll(".image-slot");
+    const errorDiv = document.getElementById("image-error");
+    const imageData = [null, null, null, null];
 
-  // Load saved taken dates
-  const saved = localStorage.getItem("takenDates");
-  if (saved) {
-    takenDates = JSON.parse(saved);
-  }
+    slots.forEach((slot, index) => {
+      const input = slot.querySelector("input[type='file']");
+      const preview = slot.querySelector(".image-preview");
 
-  // Initialize Flatpickr in inline mode (calendar is always visible)
-  const fp = flatpickr("#datePicker", {
-    mode: "multiple",
-    inline: true,
-    dateFormat: "Y-m-d",
-    disable: takenDates.map(d => new Date(d)),
-  });
+      preview.addEventListener("click", () => input.click());
 
-  // On DOM ready, show taken dates
-  document.addEventListener("DOMContentLoaded", () => {
-    updateTakenDatesList();
-  });
+      input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (!file || !file.type.startsWith("image/")) return;
 
-  // Mark selected dates as taken
-  document.getElementById("markTakenBtn").addEventListener("click", () => {
-    const selected = fp.selectedDates.map(d => d.toISOString().split("T")[0]);
+        imageData[index] = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.innerHTML = `<img src="${e.target.result}" /><button class="remove-btn" title="Remove">×</button>`;
+          preview.classList.remove("empty");
 
-    takenDates = [...new Set([...takenDates, ...selected])];
-
-    fp.set("disable", takenDates.map(d => new Date(d)));
-    fp.clear();
-
-    localStorage.setItem("takenDates", JSON.stringify(takenDates));
-    updateTakenDatesList();
-  });
-
-  // Display taken dates in the list
-  function updateTakenDatesList() {
-    const list = document.getElementById("takenDatesList");
-    list.innerHTML = "";
-    takenDates.forEach(date => {
-      const li = document.createElement("li");
-      li.textContent = date;
-      list.appendChild(li);
+          const removeBtn = preview.querySelector(".remove-btn");
+          removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            imageData[index] = null;
+            input.value = "";
+            if (index === 0) {
+              preview.innerHTML = `
+                <div>
+                  <div class="cover-text">Cover Image</div>
+                  <div class="plus-sign">+</div>
+                </div>
+              `;
+            } else {
+              preview.innerHTML = "+";
+            }
+            preview.classList.add("empty");
+          });
+        };
+        reader.readAsDataURL(file);
+      });
     });
-  }
+
+    // Example validation function
+    function validateImages() {
+      const allFilled = imageData.every(img => img !== null);
+      if (!allFilled) {
+        errorDiv.style.display = "block";
+        return false;
+      } else {
+        errorDiv.style.display = "none";
+        return true;
+      }
+    }
+
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        if (!validateImages()) {
+          e.preventDefault();
+        }
+      });
+    }
+  });
 </script>
     
 </body>
