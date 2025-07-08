@@ -179,7 +179,7 @@ const editListingById = async (req, res) => {
         bedrooms,
         description,
         email,
-        takenDates: sanitizedTakenDates,
+        takenDates,
       },
       { new: true }
     );

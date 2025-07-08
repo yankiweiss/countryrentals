@@ -276,23 +276,30 @@
 </div>
 </div>
 
-<div id="dates-available" class="listing-hidden row">
-
-<div class="col-md-6 mb-3">
-      <label for="availableFrom" class="form-label">
-        <i class="fa-solid fa-calendar-day me-2 text-primary"></i>Available From
-      </label>
-      <input type="date" class="form-control" id="availableFrom" />
+<div id="dates-available" class="listing-hidden row mb-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="mb-3">Select Availability Range</h5>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="availableFrom" class="form-label">From</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-calendar-days"></i></span>
+            <input type="date" id="availableFrom" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="vailableUntil" class="form-label">To</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-calendar-days"></i></span>
+            <input type="date" id="availableUntil" class="form-control">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <div class="col-md-6 mb-3">
-      <label for="availableUntil" class="form-label">
-        <i class="fa-solid fa-calendar-day me-2 text-primary"></i>Available Until
-      </label>
-      <input type="date" class="form-control" id="availableUntil" />
-    </div>
-
-    </div>
 
    <div id="descriptionSection" class="listing-hidden mt-4">
   <label for="listingDescription" class="form-label">

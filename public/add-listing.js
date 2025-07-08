@@ -93,83 +93,116 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+// Editing a exiting Listing
 
   function openInlineEditForm(listingId) {
   const card = document.querySelector(`button[data-id="${listingId}"]`).closest(".card");
   const title = card.querySelector(".listing-title").textContent.trim();
   const address = card.querySelector(".card-text").textContent.trim();
+  const listing = window.currentListings.find(l => l._id === listingId);
 
-  const listing = window.currentListings.find(l => l._id === listingId); // You must save all listings to window.currentListings
-
-  const takenDates = listing.takenDates || [];
+  const takenRanges = listing.takenDates || []; // This should be array of {from, to}
 
   card.innerHTML = `
-  <div class="card-body">
-    <h5 class="mb-4">Edit Listing</h5>
+    <div class="card-body">
+      <h5 class="mb-4">Edit Listing</h5>
 
-     <div class="row mb-3">
-
-    <div class="col">
-      <label for="edit-title-${listingId}" class="form-label">Name</label>
-      <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" placeholder="Listing Name" />
-    </div>
-
-     <div class="col">
-      <label for="edit-email-${listingId}" class="form-label">Email</label>
-      <input type="email" class="form-control" id="edit-email-${listingId}" value="${listing.email || ''}" placeholder="Contact email" />
-    </div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col">
-        <label for="edit-baths-${listingId}" class="form-label">Baths</label>
-        <input type="number" min="0" class="form-control" id="edit-baths-${listingId}" value="${listing.baths || ''}" placeholder="Number of baths" />
+      <div class="row mb-3">
+        <div class="col">
+          <label for="edit-title-${listingId}" class="form-label">Name</label>
+          <input type="text" class="form-control" id="edit-title-${listingId}" value="${title}" placeholder="Listing Name" />
+        </div>
+        <div class="col">
+          <label for="edit-email-${listingId}" class="form-label">Email</label>
+          <input type="email" class="form-control" id="edit-email-${listingId}" value="${listing.email || ''}" placeholder="Contact email" />
+        </div>
       </div>
-      <div class="col">
-        <label for="edit-bedrooms-${listingId}" class="form-label">Bedrooms</label>
-        <input type="number" min="0" class="form-control" id="edit-bedrooms-${listingId}" value="${listing.bedrooms || ''}" placeholder="Number of bedrooms" />
+
+      <div class="row mb-3">
+        <div class="col">
+          <label for="edit-baths-${listingId}" class="form-label">Baths</label>
+          <input type="number" min="0" class="form-control" id="edit-baths-${listingId}" value="${listing.baths || ''}" />
+        </div>
+        <div class="col">
+          <label for="edit-bedrooms-${listingId}" class="form-label">Bedrooms</label>
+          <input type="number" min="0" class="form-control" id="edit-bedrooms-${listingId}" value="${listing.bedrooms || ''}" />
+        </div>
       </div>
+
+      <div class="mb-3">
+        <label for="edit-description-${listingId}" class="form-label">Description</label>
+        <textarea class="form-control" id="edit-description-${listingId}" rows="3">${listing.description || ''}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="edit-address-${listingId}" class="form-label">Address</label>
+        <input type="text" class="form-control" id="edit-address-${listingId}" value="${address}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Add Taken Date Range</label>
+        <input id="flatpickr-range-${listingId}" class="form-control mb-2" placeholder="Select date range" />
+        <button class="btn btn-primary btn-sm mb-2" id="add-range-btn-${listingId}">Add Range</button>
+        <div id="taken-dates-list-${listingId}" class="mb-2"></div>
+        <input type="hidden" id="taken-dates-${listingId}" />
+      </div>
+
+      <button class="btn btn-success btn-sm" onclick="submitEdit('${listingId}')">Save</button>
+      <button class="btn btn-secondary btn-sm ms-2" onclick="location.reload()">Cancel</button>
     </div>
+  `;
 
-    <div class="mb-3">
-      <label for="edit-description-${listingId}" class="form-label">Description</label>
-      <textarea class="form-control" id="edit-description-${listingId}" rows="3" placeholder="Enter description">${listing.description || ''}</textarea>
-    </div>
+  let takenDates = [...takenRanges]; // Store in memory
 
-
-    <div class="mb-3">
-      <label for="edit-address-${listingId}" class="form-label">Address</label>
-      <input type="text" class="form-control" id="edit-address-${listingId}" value="${address}" placeholder="Listing address" />
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Taken Dates</label>
-      <div id="edit-datePicker-${listingId}" class="mb-2"></div>
-      <input type="hidden" id="taken-dates-${listingId}" />
-    </div>
-
-    <button class="btn btn-success btn-sm" onclick="submitEdit('${listingId}')">Save</button>
-    <button class="btn btn-secondary btn-sm ms-2" onclick="location.reload()">Cancel</button>
-  </div>
-`;
-
-  // Initialize Flatpickr inside the edit card
-  const fp = flatpickr(`#edit-datePicker-${listingId}`, {
-    mode: "multiple",
-    inline: true,
+  // Initialize Flatpickr
+  let selectedRange = [];
+  const fp = flatpickr(`#flatpickr-range-${listingId}`, {
+    mode: "range",
     dateFormat: "Y-m-d",
-    defaultDate: takenDates,
     onChange: (selectedDates) => {
-      const formatted = selectedDates.map(d => d.toISOString().split("T")[0]);
-      document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(formatted);
+      selectedRange = selectedDates;
     }
   });
 
-  // Preload hidden input with original dates
-  document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(takenDates);
+  // Add range button
+  document.getElementById(`add-range-btn-${listingId}`).addEventListener("click", () => {
+    if (selectedRange.length === 2) {
+      const from = selectedRange[0].toISOString().split("T")[0];
+      const to = selectedRange[1].toISOString().split("T")[0];
+      takenDates.push({ from, to });
+      selectedRange = [];
+      fp.clear();
+      updateTakenDates();
+    } else {
+      alert("Please select a date range.");
+    }
+  });
+
+  function updateTakenDates() {
+    // update hidden input
+    document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(takenDates);
+
+    // render list
+    const container = document.getElementById(`taken-dates-list-${listingId}`);
+    container.innerHTML = "";
+    takenDates.forEach((range, i) => {
+      const div = document.createElement("div");
+      div.innerHTML = `From: ${range.from} To: ${range.to} <button class="btn btn-sm btn-danger ms-2" onclick="removeRange(${i}, '${listingId}')">Remove</button>`;
+      container.appendChild(div);
+    });
+  }
+
+  window.removeRange = function(index, listingId) {
+    takenDates.splice(index, 1);
+    updateTakenDates();
+  };
+
+  // Initial load
+  updateTakenDates();
 }
 
-  async function submitEdit(listingId) {
+
+async function submitEdit(listingId) {
   const newTitle = document.getElementById(`edit-title-${listingId}`).value.trim();
   const newBaths = document.getElementById(`edit-baths-${listingId}`).value.trim();
   const newBedrooms = document.getElementById(`edit-bedrooms-${listingId}`).value.trim();
@@ -178,8 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const newAddress = document.getElementById(`edit-address-${listingId}`).value.trim();
   const takenDates = JSON.parse(document.getElementById(`taken-dates-${listingId}`).value || "[]");
 
-
-   const updatedData = {
+  const updatedData = {
     name: newTitle,
     baths: newBaths,
     bedrooms: newBedrooms,
@@ -191,7 +223,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const res = await fetch(`https://upstatekosherrentals.com/listing/${listingId}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
     });
@@ -199,14 +231,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!res.ok) throw new Error("Failed to update");
 
     alert("Listing updated!");
-    location.reload(); // refresh to reflect changes
+    location.reload();
   } catch (err) {
     console.error(err);
     alert("Something went wrong. Try again.");
   }
 }
 
-  
+  // Creating a new Listing
 
 document.addEventListener("DOMContentLoaded", () => {
   const propertyOptions = document.querySelectorAll(".property-option");
@@ -217,8 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressBar = document.getElementById("progressBar");
   const addressInput = document.getElementById("search_input");
   const descriptionSection = document.getElementById("descriptionSection");
+  const listingDescription = document.getElementById("listingDescription");
+  const bedroomSelect = document.getElementById("bedroomSelect");
+  const bathSelect = document.getElementById("bathSelect");
+
   
 
+  // === Step 1: Select property type ===
   propertyOptions.forEach(option => {
     option.addEventListener("click", () => {
       const type = option.getAttribute("data-type");
@@ -226,14 +263,13 @@ document.addEventListener("DOMContentLoaded", () => {
       listForm.classList.add("listing-hidden");
       addressSection.classList.remove("listing-hidden");
       bedAndBathsSection.classList.add("listing-hidden");
-     
 
       progressBar.style.width = "50%";
       progressBar.textContent = "50%";
     });
   });
 
-  // After address input: save and show bedrooms & baths
+  // === Step 2: Address input ===
   function saveAddressAndProceed() {
     const address = addressInput.value.trim();
     if (!address) return;
@@ -241,12 +277,10 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("address", address);
     addressSection.classList.add("listing-hidden");
     bedAndBathsSection.classList.remove("listing-hidden");
-    
 
     progressBar.style.width = "75%";
     progressBar.textContent = "75%";
 
-    const bedroomSelect = document.getElementById("bedroomSelect");
     if (bedroomSelect) bedroomSelect.focus();
   }
 
@@ -258,10 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // When baths are selected: save both bedrooms & baths, then show dates
-  const bedroomSelect = document.getElementById("bedroomSelect");
-  const bathSelect = document.getElementById("bathSelect");
-
+  // === Step 3: Bedrooms and baths ===
   bathSelect.addEventListener("change", () => {
     const bedrooms = bedroomSelect.value;
     const baths = bathSelect.value;
@@ -274,110 +305,97 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("bedrooms", bedrooms);
     localStorage.setItem("baths", baths);
 
-    // Hide bed/baths section, show dates section
     bedAndBathsSection.classList.add("listing-hidden");
     datesSection.classList.remove("listing-hidden");
 
     progressBar.style.width = "90%";
     progressBar.textContent = "90%";
 
-    // Optionally focus "Available From"
     const availableFrom = document.getElementById("availableFrom");
     if (availableFrom) availableFrom.focus();
   });
 
-  // Optionally, save dates to localStorage on change as well:
+  // === Step 4: Dates ===
   document.getElementById("availableFrom").addEventListener("change", (e) => {
     localStorage.setItem("availableFrom", e.target.value);
   });
+
   document.getElementById("availableUntil").addEventListener("change", (e) => {
     localStorage.setItem("availableUntil", e.target.value);
 
-
-     if (descriptionSection) {
+    if (descriptionSection) {
       descriptionSection.classList.remove("listing-hidden");
     }
 
-     progressBar.style.width = "100%";
+    progressBar.style.width = "100%";
     progressBar.textContent = "100%";
 
     const textarea = descriptionSection.querySelector("textarea");
     if (textarea) textarea.focus();
   });
 
-  
-  });
+  // === Final Step: Submit on description blur ===
+  listingDescription.addEventListener("blur", async () => {
+    const description = listingDescription.value.trim();
 
-
-
-  document.getElementById("listingDescription").addEventListener("blur", async () => {
-  const description = document.getElementById("listingDescription").value.trim();
-
-  if (!description) {
-    alert("Please enter a description before continuing.");
-    return;
-  }
-
-  // Retrieve values from localStorage
-  const propertyType = localStorage.getItem("selectedPropertyType");
-  const address = localStorage.getItem("address");
-  const bedrooms = localStorage.getItem("bedrooms");
-  const email = localStorage.getItem("loggedInEmail");
-  const baths = localStorage.getItem("baths");
-  const availableFrom = localStorage.getItem("availableFrom");
-  const availableUntil = localStorage.getItem("availableUntil");
-  const name = "Jacob Weiss"
-
-  // Construct the data object
-  const listingData = {
-    propertyType,
-    address,
-    bedrooms,
-    baths,
-    availableFrom,
-    availableUntil,
-    description,
-    email,
-    name
-  };
-
-  console.log(listingData)
-
-  // Validate all fields exist
-  if (!propertyType || !address || !bedrooms || !baths || !availableFrom || !availableUntil) {
-    alert("Some listing details are missing. Please go back and complete the form.");
-    return;
-  }
-
-  try {
-    const response = await fetch("https://upstatekosherrentals.com/listing", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(listingData)
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      alert("Listing submitted successfully!");
-      console.log("Server response:", result);
-
-      // Optionally clear localStorage:
-      localStorage.clear();
-
-      // Redirect or proceed
-      window.location.href = "/listing-success";
-    } else {
-      const error = await response.json();
-      console.log(propertyType)
-      console.error("Submission error:", error);
-      alert("Submission failed: " + (error.message || "Try again."));
+    if (!description) {
+      alert("Please enter a description before continuing.");
+      return;
     }
-  } catch (err) {
-    console.error("Fetch error:", err);
-    alert("An error occurred while submitting your listing.");
-  }
+
+    const propertyType = localStorage.getItem("selectedPropertyType");
+    const address = localStorage.getItem("address");
+    const bedrooms = localStorage.getItem("bedrooms");
+    const email = localStorage.getItem("loggedInEmail") || "no-reply@example.com";
+    const baths = localStorage.getItem("baths");
+    const name = "Jacob Weiss"; // Optional: make dynamic later
+    let takenDates = [];
+    
+
+    const listingData = {
+      propertyType,
+      address,
+      bedrooms,
+      baths,
+      takenDates,
+      description,
+      email,
+      name,
+      takenDates
+    };
+
+    // === Validate required fields ===
+    if (!propertyType || !address || !bedrooms || !baths ) {
+      alert("Some listing details are missing or taken dates are not set. Please complete the form.");
+      return;
+    }
+
+    console.log(listingData)
+
+    try {
+      const response = await fetch("https://upstatekosherrentals.com/listing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(listingData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert("Listing submitted successfully!");
+        console.log("Server response:", result);
+
+        localStorage.clear();
+        window.location.href = "/listing-success";
+      } else {
+        const error = await response.json();
+        console.error("Submission error:", error);
+        alert("Submission failed: " + (error.message || "Try again."));
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("An error occurred while submitting your listing.");
+    }
+  });
 });
 
 

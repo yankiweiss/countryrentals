@@ -10,7 +10,7 @@ router.route('/')
 router.get("/email", listingController.getListingByEmail);
 router.get("/:id", listingController.getListingById);
 router.post("/", listingController.createNewListing);
-router.patch("/:id", listingController.editListingById);
+router.put("/:id", listingController.editListingById);
 router.delete('/:id', listingController.deleteListingById);
 router.post('/reset-takendates',listingController.resetTakenDatesForListings);
  // ✅ This line enables updates
