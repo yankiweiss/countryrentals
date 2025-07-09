@@ -44,7 +44,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 
 
-
+app.use('/api/admin', require('./routes/api/admin.js'))
 app.use('/register', require('./routes/register.js'))
 app.use('/refresh', require('./routes/refresh.js'))
 app.use('/auth', require('./routes/auth.js'))
