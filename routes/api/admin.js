@@ -3,7 +3,7 @@ const router = express.Router();
 const adminController = require("../../controllers/adminController");
 const verifyJWT = require('../../middleware/verifyJWT')
 
-router.route('/admin')
+router.route('/')
 
 
 .post(adminController.addAFelidsInDatabase)
