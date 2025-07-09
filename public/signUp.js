@@ -16,7 +16,7 @@ signUpForm.addEventListener('submit', async(e) => {
 
     try {
     const signUpRes = await fetch(
-      "https://upstatekosherrentals.com//register",
+      "https://upstatekosherrentals.com/register",
       {
         method: "POST",
         headers: {
