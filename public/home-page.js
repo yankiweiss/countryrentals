@@ -1,7 +1,7 @@
 
 const listingSection = document.getElementById('listings');
 
-let allListings = []; 
+let allListings = [];
 
 async function fetchListings() {
   try {
@@ -10,7 +10,7 @@ async function fetchListings() {
     const approvedListings = data.filter(listing => listing.status === 'approved')
 
     allListings = approvedListings;
-   
+
     displayHomeListings(approvedListings);
   } catch (error) {
     console.error("Error fetching listings:", error);
@@ -80,15 +80,39 @@ async function displayHomeListings(listings) {
       imgWrapper.appendChild(img);
       card.appendChild(imgWrapper);
 
-      const content = `
-        <div style="padding: 10px;">
-          <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
-          <div style="text-align: center; margin: 8px 0; color: rgb(97, 97, 97);">
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-xl"></i></strong></span> <span style="margin: 5px;">${listing.bedrooms}</span>
-            <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-xl"></i></strong></span><span style="margin: 5px;">${listing.baths}</span>
-          </div>
-        </div>
-      `;
+       const secondSummerStart = new Date("2025-07-28");
+const secondSummerEnd = new Date("2025-08-26");
+
+let availabilityMessage = "";
+
+if (Array.isArray(listing.takenDates) && listing.takenDates.length > 0) {
+  const hasFullSummerTaken = listing.takenDates.some(range => {
+    const from = new Date(range.from);
+    const to = new Date(range.to);
+    return from <= secondSummerStart && to >= secondSummerEnd;
+  });
+
+  if (hasFullSummerTaken) {
+    availabilityMessage = `<div style="color: red; text-align: center; font-weight: bold;">No Dates Available</div>`;
+  } else {
+    availabilityMessage = `<div style="color: red; text-align: center; font-weight: bold;">Some Dates Taken</div>`;
+  }
+}
+
+      let content = `
+  <div style="padding: 10px;">
+    <h5 style="margin: 0; text-align: center;">${listing.street}</h5>
+    <div style="text-align: center; margin: 8px 0; color: rgb(97, 97, 97);">
+      <span style="margin: 5px;"><strong><i class="fa-solid fa-bed fa-xl"></i></strong></span> <span style="margin: 5px;">${listing.bedrooms}</span>
+      <span style="margin: 5px;"><strong><i class="fa-solid fa-bath fa-xl"></i></strong></span><span style="margin: 5px;">${listing.baths}</span>
+
+      ${availabilityMessage}
+    </div>
+`;
+
+    
+
+     
 
       card.insertAdjacentHTML("beforeend", content);
       link.appendChild(card);
@@ -132,11 +156,11 @@ fetchListings();
 //
 //  const res = await fetch('http://localhost:3000/search');
 //  const data = await res.json();
-//  
+//
 //  const excludedCities = ['Brooklyn', 'New York', 'Somerset'];
 //  const cities = data.filter(city => !excludedCities.includes(city));
 //
-//  
+//
 //
 //  const select = document.getElementById('area-select')
 //
@@ -146,7 +170,7 @@ fetchListings();
 //    option.textContent = city;
 //    select.appendChild(option)
 //  })
-//  
+//
 //}
 //
 //populateCities();
