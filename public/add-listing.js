@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const listingForm = document.getElementById("list-form");
   const listingsSection = document.getElementById("listings-section");
   const listingsContainer = document.getElementById("listings-container");
+  const promoMessage = document.querySelector('.promo-message')
 
   
 
@@ -17,10 +18,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       listingForm.classList.remove("listing-hidden");
       listingsSection.style.display = "none";
       addListingBtn.textContent = "Close";
+      promoMessage.innerHTML = `
+   <i class="bi bi-info-circle-fill me-1"></i>
+  Need help filling out the form?
+  <span class="ms-2">
+    <i class="bi bi-telephone-fill me-1"></i>
+    Call us at <a href="tel:9178317025">(917)-831-7025</a>
+  </span>
+`;
     } else {
       listingForm.classList.add("listing-hidden");
       listingsSection.style.display = "block";
       addListingBtn.textContent = "+ Add New Listing";
+     promoMessage.innerHTML =" 🎉 Showcase your rental for just <strong>$250</strong> — reach hundreds of visitors every day."
     }
   });
 
@@ -266,10 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
    const allPropertyOptions = document.getElementById("property-options");
 
 
-  
-  
 
-  
 
   // === Step 1: Select property type ===
   propertyOptions.forEach(option => {
@@ -424,13 +431,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
  document.addEventListener("DOMContentLoaded", () => {
-    const slots = document.querySelectorAll(".image-slot");
-    const errorDiv = document.getElementById("image-error");
-    const imageData = [null, null, null, null];
+  const imageBoxes = document.getElementById("image-boxes");
+  const errorDiv = document.getElementById("image-error");
+  const addMoreBtn = document.getElementById("add-more-images");
+  const doneBtn = document.getElementById("done-uploading");
+  const imageSection = document.getElementById("upload-image-section");
+  const addressSection = document.getElementById("address");
 
-    slots.forEach((slot, index) => {
-      const input = slot.querySelector("input[type='file']");
-      const preview = slot.querySelector(".image-preview");
+  let imageData = [];
+  const initialSlots = 4;
+  const extraSlots = 6;
+
+ function createImageSlots(count, start = 0) {
+    for (let i = 0; i < count; i++) {
+      const index = start + i;
+      imageData[index] = null;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "image-slot";
+      wrapper.dataset.index = index;
+
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+       input.style.display = "none";
+
+      const preview = document.createElement("div");
+      preview.className = "image-preview empty";
+      preview.innerHTML =
+        index === 0 && start === 0
+          ? `<div><div class="cover-text">Cover Image</div><div class="plus-sign">+</div></div>`
+          : "+";
 
       preview.addEventListener("click", () => input.click());
 
@@ -449,68 +480,62 @@ document.addEventListener("DOMContentLoaded", () => {
             e.stopPropagation();
             imageData[index] = null;
             input.value = "";
-            if (index === 0) {
-              preview.innerHTML = `
-                <div>
-                  <div class="cover-text">Cover Image</div>
-                  <div class="plus-sign">+</div>
-                </div>
-              `;
-            } else {
-              preview.innerHTML = "+";
-            }
+            preview.innerHTML =
+              index === 0 && start === 0
+                ? `<div><div class="cover-text">Cover Image</div><div class="plus-sign">+</div></div>`
+                : "+";
             preview.classList.add("empty");
+            doneBtn.classList.add("d-none");
           });
+
+          checkAutoUploadTrigger();
         };
         reader.readAsDataURL(file);
       });
-    });
 
-    // Example validation function
-    function validateImages() {
-      const allFilled = imageData.every(img => img !== null);
-      if (!allFilled) {
-        errorDiv.style.display = "block";
-        return false;
-      } else {
-        errorDiv.style.display = "none";
-        return true;
-      }
+      wrapper.appendChild(input);
+      wrapper.appendChild(preview);
+      if (index === 0 && start === 0) {
+  document.getElementById("cover-image-row").appendChild(wrapper);
+} else {
+  document.getElementById("other-images-row").appendChild(wrapper);
+}
+    }
+  }
+
+  function checkAutoUploadTrigger() {
+    const filled = imageData.filter((img, i) => i < 4 && img !== null).length;
+
+    if (imageData.length === 4 && filled === 4) {
+      uploadImagesToCloudinary(imageData.filter(img => img !== null));
     }
 
-    const form = document.querySelector("form");
-    if (form) {
-      form.addEventListener("submit", (e) => {
-        if (!validateImages()) {
-          e.preventDefault();
-        }
-      });
+    if (imageData.length > 4 && filled >= 4) {
+      doneBtn.classList.remove("d-none");
+    }
+  }
+
+  function validateImages() {
+    const valid = imageData.slice(0, 4).every(file => file !== null);
+    errorDiv.style.display = valid ? "none" : "block";
+    return valid;
+  }
+
+  addMoreBtn.addEventListener("click", () => {
+    createImageSlots(extraSlots, 4);
+    addMoreBtn.classList.add("d-none");
+    doneBtn.classList.remove("d-none");
+  });
+
+  doneBtn.addEventListener("click", () => {
+    if (validateImages()) {
+      const allFiles = imageData.filter(file => file !== null);
+      uploadImagesToCloudinary(allFiles);
     }
   });
 
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const imageSlots = document.querySelectorAll("#image-boxes .image-slot input[type='file']");
-    const imageSection = document.getElementById("upload-image-section");
-    const addressSection = document.getElementById("address");
-
-    function checkIfAllImagesUploaded() {
-      const allUploaded = Array.from(imageSlots).every(input => input.files.length > 0);
-      if (allUploaded) {
-        uploadImagesToCloudinary();
-        // Hide image section, show address section
-        imageSection.classList.add("listing-hidden");
-        addressSection.classList.remove("listing-hidden");
-
-        // Optional: scroll to address section
-        addressSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-
-    imageSlots.forEach(input => {
-      input.addEventListener("change", checkIfAllImagesUploaded);
-    });
-  });
+  createImageSlots(initialSlots);
+});
 
 
   async function uploadImagesToCloudinary() {
