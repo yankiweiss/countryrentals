@@ -18,7 +18,7 @@ function displayListing(listing) {
   // Only show the first image initially
   const uploadFiles = listing.uploadedFiles;
 
-  const thumbnailsHTML = uploadFiles.slice(0,10).map(url => `
+  const thumbnailsHTML = uploadFiles.map(url => `
     <img 
       src="${url}" 
       class="thumbnail-img" 

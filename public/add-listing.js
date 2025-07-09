@@ -104,7 +104,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Your property option & form step logic here...
 
   // (You can just copy your existing second DOMContentLoaded logic here)
-});
+
+})
 
 
 // Editing a exiting Listing
@@ -356,78 +357,110 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textarea = descriptionSection.querySelector("textarea");
     if (textarea) textarea.focus();
-  });
+
+    proceedToCheckout.classList.remove('listing-hidden')
+  })
+})
+
+
+
+  const proceedToCheckout = document.getElementById("Proceed")
 
   // === Final Step: Submit on description blur ===
-  listingDescription.addEventListener("blur", async () => {
-    const description = listingDescription.value.trim();
+  proceedToCheckout.addEventListener("click", async () => {
+  const description = listingDescription.value.trim();
 
-    if (!description) {
-      alert("Please enter a description before continuing.");
-      return;
+  if (!description) {
+    alert("Please enter a description before continuing.");
+    return;
+  }
+
+  const propertyType = localStorage.getItem("selectedPropertyType");
+  const address = localStorage.getItem("address");
+  const bedrooms = localStorage.getItem("bedrooms");
+  const availableUntil = localStorage.getItem("availableUntil");
+  const availableFrom = localStorage.getItem("availableFrom");
+  const email = localStorage.getItem("loggedInEmail") || "no-reply@example.com";
+  const baths = localStorage.getItem("baths");
+  const name = "Jacob Weiss"; // Optional: make dynamic later
+  const imageUrls = JSON.parse(localStorage.getItem("uploadedImageUrls") || "[]");
+
+  // You can dynamically set takenDates if needed
+  const takenDates = [];
+
+  const listingData = {
+    propertyType,
+    address,
+    bedrooms,
+    baths,
+    takenDates,
+    description,
+    email,
+    name,
+    availableUntil,
+    availableFrom,
+    uploadedFiles: imageUrls,
+  };
+
+  if (!propertyType || !address || !bedrooms || !baths) {
+    alert("Some listing details are missing. Please complete the form.");
+    return;
+  }
+
+  try {
+    const response = await fetch("https://upstatekosherrentals.com/listing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(listingData)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Failed to create listing.");
     }
 
-   
-    const propertyType = localStorage.getItem("selectedPropertyType");
-    const address = localStorage.getItem("address");
-    const bedrooms = localStorage.getItem("bedrooms");
-    const availableUntil = localStorage.getItem("availableUntil");
-    const availableFrom = localStorage.getItem("availableFrom");
-    const email = localStorage.getItem("loggedInEmail") || "no-reply@example.com";
-    const baths = localStorage.getItem("baths");
-    const name = "Jacob Weiss"; // Optional: make dynamic later
-    let takenDates = [];
-    
-    const imageUrls = JSON.parse(localStorage.getItem("uploadedImageUrls") || "[]");
+    const result = await response.json();
+    const listingId = result._id || result.id;
 
-    const listingData = {
-      propertyType,
-      address,
-      bedrooms,
-      baths,
-      takenDates,
-      description,
-      email,
-      name,
-      availableUntil,
-      availableFrom,
-      takenDates,
-      uploadedFiles: imageUrls,
-    };
+    const coverImageUrl = imageUrls[0] || null;
 
-    // === Validate required fields ===
-    if (!propertyType || !address || !bedrooms || !baths ) {
-      alert("Some listing details are missing or taken dates are not set. Please complete the form.");
-      return;
-    }
-
-    console.log(listingData)
-
+    // Stripe Checkout
     try {
-      const response = await fetch("https://upstatekosherrentals.com/listing", {
+      const stripeRes = await fetch("https://www.upstatekosherrentals.com/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(listingData)
+        body: JSON.stringify({
+          coverImageUrl,
+          customerEmail: email,
+          listingId
+        }),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        alert("Listing submitted successfully!");
-        console.log("Server response:", result);
+      const stripeData = await stripeRes.json();
 
+      if (stripeData.url) {
         localStorage.clear();
-        window.location.href = "/listing-success";
+        window.location.href = stripeData.url;
+        return;
       } else {
-        const error = await response.json();
-        console.error("Submission error:", error);
-        alert("Submission failed: " + (error.message || "Try again."));
+        throw new Error("No URL returned from Stripe");
       }
     } catch (err) {
-      console.error("Fetch error:", err);
-      alert("An error occurred while submitting your listing.");
+      console.error("Stripe redirect failed:", err);
+      alert("Could not redirect to Stripe checkout.");
     }
-  });
-});
+
+    // fallback redirect (only if Stripe failed)
+    localStorage.clear();
+    window.location.href = "/";
+    
+  } catch (err) {
+    console.error("Submission failed:", err);
+    alert("An error occurred while submitting your listing.");
+  }
+})
+
+ 
 
 
  document.addEventListener("DOMContentLoaded", () => {
@@ -440,9 +473,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let imageData = [];
   const initialSlots = 4;
-  const extraSlots = 6;
+  const extraSlots = 15;
 
- function createImageSlots(count, start = 0) {
+  function createImageSlots(count, start = 0) {
     for (let i = 0; i < count; i++) {
       const index = start + i;
       imageData[index] = null;
@@ -454,7 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const input = document.createElement("input");
       input.type = "file";
       input.accept = "image/*";
-       input.style.display = "none";
+      input.style.display = "none";
 
       const preview = document.createElement("div");
       preview.className = "image-preview empty";
@@ -485,33 +518,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? `<div><div class="cover-text">Cover Image</div><div class="plus-sign">+</div></div>`
                 : "+";
             preview.classList.add("empty");
-            doneBtn.classList.add("d-none");
           });
-
-          checkAutoUploadTrigger();
         };
         reader.readAsDataURL(file);
       });
 
       wrapper.appendChild(input);
       wrapper.appendChild(preview);
+
       if (index === 0 && start === 0) {
-  document.getElementById("cover-image-row").appendChild(wrapper);
-} else {
-  document.getElementById("other-images-row").appendChild(wrapper);
-}
-    }
-  }
-
-  function checkAutoUploadTrigger() {
-    const filled = imageData.filter((img, i) => i < 4 && img !== null).length;
-
-    if (imageData.length === 4 && filled === 4) {
-      uploadImagesToCloudinary(imageData.filter(img => img !== null));
-    }
-
-    if (imageData.length > 4 && filled >= 4) {
-      doneBtn.classList.remove("d-none");
+        document.getElementById("cover-image-row").appendChild(wrapper);
+      } else {
+        document.getElementById("other-images-row").appendChild(wrapper);
+      }
     }
   }
 
@@ -523,8 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   addMoreBtn.addEventListener("click", () => {
     createImageSlots(extraSlots, 4);
-    addMoreBtn.classList.add("d-none");
-    doneBtn.classList.remove("d-none");
+    addMoreBtn.classList.add("d-none"); // Hide to prevent multiple sets
   });
 
   doneBtn.addEventListener("click", () => {
@@ -534,17 +552,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Initial 4 slots
   createImageSlots(initialSlots);
 });
 
-
-  async function uploadImagesToCloudinary() {
-  const imageInputs = document.querySelectorAll(".image-slot input[type='file']");
-  const imageFiles = Array.from(imageInputs).map(input => input.files[0]);
-
+async function uploadImagesToCloudinary(files) {
   const imageUrls = [];
 
-  for (const file of imageFiles) {
+  for (const file of files) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
@@ -571,10 +586,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Save URLs in localStorage or a variable
   localStorage.setItem("uploadedImageUrls", JSON.stringify(imageUrls));
 
-  // Proceed to next step
   document.getElementById("upload-image-section").classList.add("listing-hidden");
   document.getElementById("address").classList.remove("listing-hidden");
   document.getElementById("address").scrollIntoView({ behavior: "smooth" });
