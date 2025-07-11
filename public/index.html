@@ -32,28 +32,20 @@
 
 <body>
 
-  <header class="header">
+  <header class="header d-flex justify-content-between align-items-center flex-wrap px-3 py-2">
+  <div id="logo">
+    <img src="/images/58f0fd75-23e6-4638-ae71-4b0307c4daf3.png" alt="Logo" >
+  </div>
 
-    <div id="logo">
-      <img src="images/logo-transparent-png_c_pad,w_300,h_300 (1).png" />
-    </div>
-
-
-
-    <div>
-      <a href="/signUp.html" class="list-button">Share Your Space </a>
-    </div>
-
-    <div class="contact-info">
-      <a href="#contact">Contact Us</a>
-    </div>
-
-    <div class="signIn">
-      <a href="/signIn">Sign in</a>
-    </div>
-
-
-  </header>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+  <i class="fas fa-bars"></i>
+</button>
+  <div class="header-buttons d-flex flex-wrap gap-3" id="header-buttons">
+    <a href="/signUp.html" class="btn btn-primary">Share Your Space</a>
+    <a href="#contact" class="btn btn-outline-secondary">Contact Us</a>
+    <a href="/signIn" class="btn btn-outline-dark">Sign in</a>
+  </div>
+</header>
 
   <h1 style="display: none;">Upstate Kosher Rentals</h1>
 

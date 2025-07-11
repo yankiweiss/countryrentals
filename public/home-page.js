@@ -1,3 +1,17 @@
+// hamburger 
+
+document.addEventListener("DOMContentLoaded", function () {
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("header-buttons");
+  const icon = hamburger.querySelector("i");
+
+  hamburger.addEventListener("click", function () {
+    menu.classList.toggle("show");
+    icon.classList.toggle("fa-bars");
+    icon.classList.toggle("fa-xmark"); // Show close icon
+  });
+});
+
 
 const listingSection = document.getElementById('listings');
 

@@ -4,17 +4,55 @@
 
 }
 
+.header {
+  position: relative;
+}
+
+/* Hamburger button */
+.hamburger {
+  display: block;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Header buttons - overlay menu */
+.header-buttons {
+  display: none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  flex-direction: column;
+  background: white;
+  padding: 20px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  align-items: center;
+}
+
+.header-buttons.show {
+  display: flex !important;
+}
+
+ 
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f9f9f9;
 }
 
 #logo img{
-  width: 98%;
+  width: 100%;
   margin: auto;
 }
 
-.list-button{
+/*.list-button{
   display: none;
 }
 .contact-info a {
@@ -56,7 +94,7 @@ body {
   border-bottom: 2px solid #007BFF;
   border-radius: 15px;
   color: #007BFF;
-}
+}*/
 
 
 .city-section {
@@ -248,8 +286,34 @@ footer{
 
 @media screen and (min-width: 850px) {
 
-  .header {
+
+.header {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+#logo img {
+  width: 35%;
+}
+
+.header-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+
+.header-buttons a {
+  width: auto;
+  max-width: none;
+}
+
+  /*.header {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 5px 15px;
@@ -261,10 +325,7 @@ footer{
 }
 
 /* Logo */
-#logo img {
-  width: 50%;
-  margin:  0 40px;
-}
+
 
 /* List Button */
 .list-button {
@@ -304,7 +365,7 @@ footer{
   border-bottom: 2px solid #007BFF;
   border-radius: 15px;
   color: #007BFF;
-}
+}*/
 
 #container{
 display: flex;
@@ -452,6 +513,15 @@ footer{
   width: 45%;
   padding: 100px;
  
+}
+
+.hamburger {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
 }
 
 #email-phone a {
