@@ -261,6 +261,8 @@ async function submitEdit(listingId) {
 
   // Creating a new Listing
 
+  let modelId = 
+
 document.addEventListener("DOMContentLoaded", () => {
   const propertyOptions = document.querySelectorAll(".property-option");
   const imagesSection = document.getElementById("upload-image-section")
@@ -368,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Final Step: Submit on description blur ===
   proceedToCheckout.addEventListener("click", async () => {
+    showLoadingModal();
   const description = listingDescription.value.trim();
 
   if (!description) {
@@ -556,7 +559,21 @@ document.addEventListener("DOMContentLoaded", () => {
   createImageSlots(initialSlots);
 });
 
+function showLoadingModal() {
+  const modal = new bootstrap.Modal(document.getElementById("loadingModal"));
+  modal.show();
+  window.currentLoadingModal = modal;
+}
+
+function hideLoadingModal() {
+  if (window.currentLoadingModal) {
+    window.currentLoadingModal.hide();
+    window.currentLoadingModal = null;
+  }
+}
+
 async function uploadImagesToCloudinary(files) {
+  showLoadingModal();
   const imageUrls = [];
 
   for (const file of files) {
@@ -591,6 +608,7 @@ async function uploadImagesToCloudinary(files) {
   document.getElementById("upload-image-section").classList.add("listing-hidden");
   document.getElementById("address").classList.remove("listing-hidden");
   document.getElementById("address").scrollIntoView({ behavior: "smooth" });
+   hideLoadingModal();
 }
 
 
