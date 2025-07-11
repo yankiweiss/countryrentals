@@ -34,10 +34,16 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   align-items: center;
+  transition: all 0.3s ease;
+opacity: 0;
+pointer-events: none;
 }
+
 
 .header-buttons.show {
   display: flex !important;
+   opacity: 1;
+  pointer-events: auto;
 }
 
  
@@ -300,10 +306,16 @@ footer{
 }
 
 .header-buttons {
-  display: flex;
+  display: flex !important;
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  background: transparent;
+  box-shadow: none;
   flex-direction: row;
   align-items: center;
-  gap: 30px;
+  justify-content: flex-end;
+  padding: 0;
 }
 
 .header-buttons a {
@@ -516,12 +528,7 @@ footer{
 }
 
 .hamburger {
-  display: none;
-  font-size: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #333;
+  display: none !important;
 }
 
 #email-phone a {
