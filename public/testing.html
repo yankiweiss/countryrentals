@@ -4,164 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<style>
-    .image-slot {
-    width: 120px;
-    height: 140px;
-    position: relative;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .image-slot .label {
-    position: absolute;
-    top: -20px;
-    left: 0;
-    font-size: 0.9rem;
-    color: #333;
-    width: 100%;
-    text-align: center;
-  }
-
-  .image-preview {
-    width: 100%;
-    height: 100%;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: #aaa;
-    position: relative;
-  }
-
-  .image-preview img {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 12px;
-    width: 20px;
-    height: 20px;
-    line-height: 16px;
-    padding: 0;
-    cursor: pointer;
-  }
-</style>
-
 </head>
 <body>
-<div class="mb-4">
-  <label class="form-label">Upload 4 Images (first will be the cover)</label>
-  <div id="image-boxes" class="d-flex flex-wrap gap-3">
-    <!-- Cover Image slot -->
-    <div class="image-slot" data-index="0">
-      <input type="file" accept="image/*" hidden />
-      <div class="image-preview empty cover-label">
-        <div>
-          <div class="cover-text">Cover Image</div>
-          <div class="plus-sign">+</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Other 3 image slots -->
-    <div class="image-slot" data-index="1">
-      <input type="file" accept="image/*" hidden />
-      <div class="image-preview empty">+</div>
-    </div>
-    <div class="image-slot" data-index="2">
-      <input type="file" accept="image/*" hidden />
-      <div class="image-preview empty">+</div>
-    </div>
-    <div class="image-slot" data-index="3">
-      <input type="file" accept="image/*" hidden />
-      <div class="image-preview empty">+</div>
-    </div>
-  </div>
-  <div id="image-error" class="text-danger mt-2" style="display: none;">All 4 images are required.</div>
-</div>
+  <h1>Checking Array Methods</h1>
+
+  <button type="button" class="testing-btn">Testing</button>
 
 <script>
- document.addEventListener("DOMContentLoaded", () => {
-    const slots = document.querySelectorAll(".image-slot");
-    const errorDiv = document.getElementById("image-error");
-    const imageData = [null, null, null, null];
 
-    slots.forEach((slot, index) => {
-      const input = slot.querySelector("input[type='file']");
-      const preview = slot.querySelector(".image-preview");
+const tstBtn = document.querySelector('.testing-btn');
 
-      preview.addEventListener("click", () => input.click());
-
-      input.addEventListener("change", () => {
-        const file = input.files[0];
-        if (!file || !file.type.startsWith("image/")) return;
-
-        imageData[index] = file;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          preview.innerHTML = `<img src="${e.target.result}" /><button class="remove-btn" title="Remove">×</button>`;
-          preview.classList.remove("empty");
-
-          const removeBtn = preview.querySelector(".remove-btn");
-          removeBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            imageData[index] = null;
-            input.value = "";
-            if (index === 0) {
-              preview.innerHTML = `
-                <div>
-                  <div class="cover-text">Cover Image</div>
-                  <div class="plus-sign">+</div>
-                </div>
-              `;
-            } else {
-              preview.innerHTML = "+";
-            }
-            preview.classList.add("empty");
-          });
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    // Example validation function
-    function validateImages() {
-      const allFilled = imageData.every(img => img !== null);
-      if (!allFilled) {
-        errorDiv.style.display = "block";
-        return false;
-      } else {
-        errorDiv.style.display = "none";
-        return true;
-      }
-    }
-
-    const form = document.querySelector("form");
-    if (form) {
-      form.addEventListener("submit", (e) => {
-        if (!validateImages()) {
-          e.preventDefault();
-        }
-      });
-    }
-  });
+tstBtn.addEventListener('click', fetchListings)
+  function fetchListings(req, res) {
+  try {
+    const res = fetch("https://upstatekosherrentals.com/listing");
+    const data =  res.json();
+    console.log(data)
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+  }
+}
 </script>
     
 </body>

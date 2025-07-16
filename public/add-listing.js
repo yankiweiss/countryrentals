@@ -156,23 +156,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Select Taken Date Ranges</label>
+        <label class="form-label"><br><strong>Select Taken Date Ranges</strong></br></label>
         <div class="d-flex justify-content-center">
           <div id="inline-datepicker-${listingId}" class="mb-2"></div>
         </div>
+
+        <h2>Taken Dates:</h2>
         <div id="range-preview-${listingId}" class="mb-2"></div>
         <input type="hidden" id="taken-dates-${listingId}" />
       </div>
 
+      
+
       <button class="btn btn-success btn-sm" onclick="submitEdit('${listingId}')">Save</button>
       <button class="btn btn-secondary btn-sm ms-2" onclick="location.reload()">Cancel</button>
+
+      
     </div>
   `;
 
   const fp = flatpickr(`#inline-datepicker-${listingId}`, {
     mode: "range",
     inline: true,
-    dateFormat: "Y-m-d",
+    dateFormat: "m-d-Y",
     disable: existingRanges.map(r => ({ from: r.from, to: r.to })),
     onClose: function (selectedDates) {
       if (selectedDates.length === 2) {
@@ -189,6 +195,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const allRanges = [...existingRanges, ...newTakenDates];
     document.getElementById(`taken-dates-${listingId}`).value = JSON.stringify(allRanges);
 
+   
+
     const container = document.getElementById(`range-preview-${listingId}`);
     container.innerHTML = "";
 
@@ -197,8 +205,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const div = document.createElement("div");
       div.className = "d-flex justify-content-between align-items-center mb-1";
       div.innerHTML = `
-        <span>From: ${range.from} → To: ${range.to}</span>
+    
+        <div><span>From: ${range.from} → To: ${range.to}</span>
         <button class="btn btn-sm btn-outline-danger" onclick="removeRange_${listingId}(${index})">Remove</button>
+        </div>
       `;
       container.appendChild(div);
     });
@@ -219,6 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateTakenDates();
   };
+  
 
   updateTakenDates();
 }
