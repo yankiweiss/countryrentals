@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (bedroomSelect) bedroomSelect.focus();
   }
 
-  addressInput.addEventListener("blur", saveAddressAndProceed);
+ 
   addressInput.addEventListener("keydown", e => {
     if (e.key === "Enter") {
       e.preventDefault();
