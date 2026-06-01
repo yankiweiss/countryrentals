@@ -11,11 +11,11 @@ const listingSchema = new Schema({
   state: { type: String, required: false },
 
   baths: {
-    type: Number,
+    type: String,
     required: true,
   },
   bedrooms: {
-    type: Number,
+    type: String,
     required: true,
   },
   description: {
