@@ -34,7 +34,11 @@ async function fetchListings() {
 
 
 async function displayHomeListings(listings) {
+
+  
   const listingsByCity = {};
+
+  console.log(listingsByCity)
 
   for (const listing of listings) {
     const city = listing.city?.trim() || "Other";
