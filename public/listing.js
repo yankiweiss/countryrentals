@@ -116,6 +116,7 @@ function showImageGallery(images) {
   overlay.style.left = "0";
   overlay.style.width = "100vw";
   overlay.style.height = "100vh";
+  overlay.style.maxHeight = '500px'
   overlay.style.backgroundColor = "rgba(0,0,0,0.8)";
   overlay.style.display = "flex";
   overlay.style.flexWrap = "wrap";
@@ -130,7 +131,7 @@ function showImageGallery(images) {
     const img = document.createElement("img");
     img.src = url;
     img.style.maxWidth = "90%";
-    img.style.maxHeight = "80vh";
+    img.style.maxHeight = "500px";
     img.style.margin = "10px";
     overlay.appendChild(img);
   });

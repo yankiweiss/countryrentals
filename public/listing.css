@@ -17,6 +17,7 @@ header {
     width: 80%;
     display: block;
     cursor: pointer; 
+    max-height: 100px;
 }
 
 .listing h5{

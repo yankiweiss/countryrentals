@@ -37,6 +37,8 @@
       display: block;
       margin-bottom: 1rem;
       cursor: pointer;
+      height: 600px;
+      object-fit: cover;
     }
 
     #main-listing-image:hover {
@@ -269,6 +271,7 @@ function addClickListenerForDisabled(instance) {
       overlay.style.left = "0";
       overlay.style.width = "100vw";
       overlay.style.height = "100vh";
+      overlay.style.maxHeight = '500px'
       overlay.style.backgroundColor = "rgba(0,0,0,0.85)";
       overlay.style.display = "flex";
       overlay.style.flexWrap = "wrap";
