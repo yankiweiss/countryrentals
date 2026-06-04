@@ -31,7 +31,7 @@ app.use(
 );
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://upstatekosherrentals.com", "https://www.upstatekosherrentals.com" , 'http://localhost:5173'  ],
+  origin: ["http://localhost:3000", "https://upstatekosherrentals.com", "https://www.upstatekosherrentals.com" , 'http://localhost:5173', 'https://ukr-react.vercel.app/'  ],
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
