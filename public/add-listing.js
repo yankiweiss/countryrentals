@@ -440,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Stripe Checkout
     try {
-      const stripeRes = await fetch("https://www.upstatekosherrentals.com/checkout", {
+      const stripeRes = await fetch("https://www.jwprosoftwaresolutions.com/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
