@@ -470,7 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
   } catch (err) {
     console.error("Submission failed:", err);
-    alert("An error occurred while submitting your listing.");
+    console.log("An error occurred while submitting your listing.");
   }
 })
 
