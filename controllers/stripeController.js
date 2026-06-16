@@ -25,8 +25,8 @@ async function createCheckoutSession(req, res) {
                 }
             ],
             mode: 'payment',
-            success_url: `https://www.upstatekosherrentals.com/success?listingId=${listingId}`,
-            cancel_url: 'https://www.upstatekosherrentals.com/cancel',
+            success_url: `https://www.jwprosoftwaresolutions.com/success?listingId=${listingId}`,
+            cancel_url: 'https://www.jwprosoftwaresolutions.com/cancel',
             allow_promotion_codes: true,
             customer_email: customerEmail,
             metadata: {
